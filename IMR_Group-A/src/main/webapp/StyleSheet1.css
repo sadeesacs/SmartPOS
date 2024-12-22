@@ -137,7 +137,7 @@ html, body {
 /*Notification icon*/
 .notfication-icon{
     position: absolute;
-    left: 83%;
+    left: 81%;
     top:20px;
     color: #6c63ff; 
     width:30px;
@@ -148,7 +148,7 @@ html, body {
 /* user profile view Container styling */
 .user-profile {
     position: absolute;
-    left: 87%;
+    left: 85%;
     top:15px;
     display: flex;
     border: 2px solid #5F4AE7; 
@@ -180,6 +180,25 @@ html, body {
 .user-role {
     font-size: 12px;
     color: #808080; 
+}
+
+.main-header{
+    position: absolute;
+    top:50px;
+    left: 360px;
+    font-size:35px;
+    color:black;
+    font-weight: bold;
+}
+
+.middle-container{
+    height: 82%;
+    width:1105px;
+    left:360px;
+    top:125px;
+    border-radius: 5px;
+    background-color: white;
+    position: absolute;
 }
 
 

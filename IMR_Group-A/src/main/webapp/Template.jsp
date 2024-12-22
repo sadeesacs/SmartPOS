@@ -94,7 +94,16 @@
             </div>
         </div>
 
-        
+        <!--Main Header-->
+        <div class="main-header">
+            Customer Management
+        </div>
+
+        <!--Middle Container for content-->
+        <div class="middle-container">
+            
+        </div>
+
         
         
     </body>
