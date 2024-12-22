@@ -1,0 +1,184 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Roboto+Serif:ital,opsz,wght@0,8..144,100..900;1,8..144,100..900&display=swap');
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
+
+html, body {
+    height: 100%;    
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    overflow-x: hidden;
+    background: linear-gradient(180deg, #D6D3EB 0%, #958BDA 70%, #7E6FDC 100%);
+}
+
+.container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.header, .footer {
+    flex-shrink: 0;
+}
+
+/*Welcome container styling*/
+.welcome-container{
+    position: relative;
+    margin-left: 5%;
+    margin-top: 50px;
+    width:90%;
+    height:85%;
+    background-color: #F1F5FE;
+    border-radius: 46px;
+}
+
+.Logo {
+    width: 40px;
+    height: 40px;
+    left:40px;
+    top: 20px;
+    position: absolute;
+    display:flex;
+}
+
+.logoname {
+    color: black;
+    font-size: 33px;
+    font-family: Playfair Display;
+    font-weight: 700;
+    word-wrap: break-word;
+    left: 95px;
+    top: 19px;
+    position: absolute;
+}
+
+.welcome-text{
+    position: absolute;
+    left: 180px;
+    top: 150px;
+    color:#5E4AE7;
+    font-size: 64px;
+    font-family: Playfair Display;
+    font-weight: bold;
+}
+
+.welcome-para{
+    position: absolute;
+    left: 5%;
+    top: 270px;
+    font-size:28px;
+    text-align: center;
+    width:500px;
+    line-height: 40px;
+}
+
+.login-but{
+    position: absolute;
+    left: 210px;
+    top: 400px;
+    background-color: #5F4AE7;
+    border-radius: 10px;
+    color:white;
+    height:45px;
+    width:200px;
+    font-size: 22px;
+    border:none;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease; 
+}
+
+.login-but:hover {
+    transform: scale(1.1); 
+    background-color: #5F4AE7;
+    color: white; 
+}
+
+.login-but a {
+    text-decoration: none;
+    color:white;
+}
+
+.welcome-image{
+    position: absolute;
+    left: 43%;
+    top: 5px;
+}
+
+
+/*Login container styling*/
+.login-container{
+    position: relative;
+    margin-left: 35%;
+    margin-top: 50px;
+    width:30%;
+    height:85%;
+    background-color: #F1F5FE;
+    border-radius: 46px;
+}
+
+.login-text{
+    position: absolute;
+    left: 170px;
+    top: 120px;
+    color:#5E4AE7;
+    font-size:40px;
+    font-family: Playfair Display;
+    font-weight: bold;
+}
+
+.login-form{
+    position: absolute;
+    top:210px;
+    left:0px;
+    width:100%;
+}
+
+.login-form label {
+    margin:15px;
+    display: block;
+    margin-top: 20px;
+    margin-left:5%;
+    font-size:18px;
+    position: relative;
+    color:black;
+}
+
+.login-form input {
+    position: absolute;
+    left:5%;
+    width:90%;
+    padding: 10px;
+    border: 2px solid #5F4AE7;
+    font-size: 14px;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.login-form input[type="text"],
+.login-form input[type="password"] {
+    width:85%;
+    border-radius: 5px;
+}
+
+.login-form button{
+    width:40%;
+    border-radius: 5px;
+    padding:10px;
+    font-size: 20px;
+    margin-left:30%;
+    position: relative;
+    margin-top: 40px;
+    background-color: #5F4AE7;
+    border: 1px;
+    color: white;
+    font-family: Georgia, serif;
+    transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease; 
+    cursor: pointer;
+}
+
+.login-form button:hover {
+    transform: scale(1.1); 
+    background-color: #5F4AE7;
+    color: white; 
+} 
