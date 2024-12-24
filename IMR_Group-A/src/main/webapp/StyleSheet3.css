@@ -8,6 +8,8 @@ html, body {
     overflow: hidden;
     background-color: #F1F5FE;
     overflow-x: hidden;
+    font-family: Arial, Helvetica, sans-serif;
+
 }
 
 .container {
@@ -330,11 +332,13 @@ html, body {
 .edit {
     text-decoration: none;
     color: #F5C51B;
+    cursor: pointer;
 }
 
 .delete {
     text-decoration: none;
     color: red;
+    cursor: pointer;
 }
 
 
@@ -452,3 +456,194 @@ html, body {
 }
 
 /*Customer Management webpage styling start*/
+
+/*system user Management webpage styling start*/
+
+.content-container .user{
+    width:100%;
+    height: 40px;
+    margin-top:0px;
+    border-bottom: 1px solid black;
+    position: relative;
+}
+
+.user-id {
+    color: black;
+    font-size: 16px;
+    margin-top: 10px; 
+    font-family: Arial, Helvetica, sans-serif;
+    left: 10px;
+    position: absolute; 
+    display: inline-block; 
+}
+
+.user-s-name {
+    color: black;
+    font-size: 16px;
+    margin-top: 10px; 
+    font-family: Arial, Helvetica, sans-serif;
+    left: 190px;
+    position: absolute; 
+    display: inline-block; 
+}
+
+.user-NIC{
+    color: black;
+    font-size: 16px;
+    margin-top: 10px; 
+    font-family: Arial, Helvetica, sans-serif;
+    left: 470px;
+    position: absolute; 
+    display: inline-block; 
+}
+
+.user-s-role{
+    color: black;
+    font-size: 16px;
+    margin-top: 10px; 
+    font-family: Arial, Helvetica, sans-serif;
+    left: 710px;
+    position: absolute; 
+    display: inline-block; 
+}
+
+.user p, .user div {
+    padding: 0 10px; 
+}
+
+.user-role-select select {
+    border-radius: 5px; 
+    background-color: #F1F5FE; 
+    margin-left: 10px;
+    border: 1px solid #B9CAF0; 
+    color: black;
+    width: 85%;
+    height: 35px; 
+    padding: 5px;
+    box-sizing: border-box; 
+    font-size: 16px; 
+    font-family: Arial, Helvetica, sans-serif; 
+    appearance: none; 
+}
+
+.user-role-select select:focus {
+    outline: none; 
+    border-color: #5F4AE7;
+    width: 85%;
+}
+
+.user-role-select {
+    position: relative;
+    width: 100%;
+}
+
+.user-role-select:after {
+    content: "▼"; 
+    font-size: 12px;
+    color: #B9CAF0;
+    position: absolute;
+    left: 80%;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    width: 100%;
+}
+
+.button-wrapper {
+    display: flex; 
+    flex-direction: column; 
+    width: 100%; 
+    gap: 20px; 
+    margin-left: 38px;
+    margin-top: 50px;
+}
+
+.change-password-but {
+    width: 40%;
+    height: 40px;
+    border: 1px solid #5F4AE7;
+    background-color: transparent; 
+    color: #5F4AE7;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.form-update-but {
+    width: 40%;
+    height: 40px;
+    background-color: #5F4AE7; 
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.form-update-but:hover {
+    background-color: #3f2ecb; 
+}
+
+/* Modal Styles */
+.modal {
+    display: none; 
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); 
+    z-index: 2000; 
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    width: 30%; 
+    position: relative;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.close-modal {
+    width: 51px;
+    height: 42px;
+    margin-top: -7px;
+    margin-left:85%;
+    position: absolute;
+    cursor: pointer;
+}
+
+.modal-divider {
+    margin-top: 5px;
+    margin-left: 0px;
+    position: relative;
+}
+
+.modal-body {
+    margin-top: 20px;
+}
+
+.modal-but {
+    width: 40%;
+    height: 40px;
+    background-color: #5F4AE7; 
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left:30%;
+}
+
+.modal-but:hover {
+    background-color: #3f2ecb; 
+}
+
+/*system user Management webpage styling end*/
