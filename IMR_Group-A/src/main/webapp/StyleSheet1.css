@@ -8,6 +8,8 @@ html, body {
     overflow: hidden;
     background-color: #F1F5FE;
     overflow-x: hidden;
+    font-family: Arial, Helvetica, sans-serif;
+
 }
 
 .container {
