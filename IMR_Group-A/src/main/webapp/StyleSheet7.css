@@ -1,0 +1,378 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Roboto+Serif:ital,opsz,wght@0,8..144,100..900;1,8..144,100..900&display=swap');
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #F1F5FE;
+    overflow-x: hidden;
+    font-family: Arial, Helvetica, sans-serif;
+
+}
+
+.container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.header, .footer {
+    flex-shrink: 0;
+}
+
+
+/* navigation panel of Smart POS Dshboard*/
+.navigation {
+    height: 100%;
+    background-color: white;
+    width: 300px;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25)
+}
+
+.Logo {
+    width: 40px;
+    height: 40px;
+    left:40px;
+    top: 8px;
+    position: absolute;
+    display:flex;
+}
+
+.logoname {
+    color: black;
+    font-size: 33px;
+    font-family: Playfair Display;
+    font-weight: 700;
+    word-wrap: break-word;
+    left: 95px;
+    top: 7px;
+    position: absolute;
+}
+
+.logoname a {
+    text-decoration: none; 
+    color: inherit;
+    cursor: pointer;
+}
+
+.nav-menu {
+    list-style-type: none;
+    padding: 0px 0;
+    width:80%;
+    margin-left: 10%;
+    margin-top:80px;
+}
+
+.nav-menu a {
+    text-decoration: none; 
+    color: inherit;
+    cursor: pointer;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    color: black;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-bottom: 15px;
+}
+
+.nav-item span{
+    font-size: 18px;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    color:black;
+}
+
+.nav-item img {
+    font-size: 20px;
+    margin-right: 50px;
+}
+
+.nav-item.active {
+    background-color: #5F4AE7;
+    color: white;
+    font-weight: bold;
+    border-radius: 10px;
+}
+
+.nav-item.active span{
+    color: white;
+}
+
+.logout {
+    padding: 10px;
+    display: flex;
+    cursor: pointer;
+    position: absolute;
+    margin-top: 640px;
+    margin-left:40px;
+    background-color:#F3F7FF;
+    border:none;
+    height:45px;
+    border-radius: 10px;
+    width:200px;
+}
+
+.logout img {
+    font-size: 18px;
+    margin-right: 15px;
+}
+
+.logout span {
+    font-size: 18px;
+    color:black;
+    margin-left: 35px;
+    margin-top:5px;
+    font-weight: bold;
+}
+
+/*Notification icon*/
+.notfication-icon{
+    position: absolute;
+    left: 81%;
+    top:20px;
+    color: #6c63ff; 
+    width:30px;
+    height:35px;
+    cursor: pointer;
+}
+
+/* user profile view Container styling */
+.user-profile {
+    position: absolute;
+    left: 85%;
+    top:15px;
+    display: flex;
+    border: 2px solid #5F4AE7; 
+    border-radius: 50px;
+    background-color: #ffffff;
+    font-family: Arial, sans-serif;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    gap: 10px;
+    width:165px;
+    height:40px;
+}
+
+.user-avatar {
+    margin-left:10px;
+    margin-top:1px;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    margin-top:5px;
+}
+
+.user-name {
+    font-weight: bold;
+    color: #000;
+}
+
+.user-role {
+    font-size: 12px;
+    color: #808080; 
+}
+
+.main-header{
+    position: absolute;
+    top:50px;
+    left: 360px;
+    font-size:35px;
+    color:black;
+    font-weight: bold;
+}
+
+.middle-container{
+    height: 82%;
+    width:1105px;
+    left:360px;
+    top:125px;
+    border-radius: 5px;
+    background-color: white;
+    position: absolute;
+}
+
+/*Dicount management webpage styling*/
+.add-discount-container {
+    width: 100%;
+}
+
+.add-discount-container h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    margin-left: 40px;
+    color: #333;
+}
+
+.discount-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+        margin-left: 40px;
+
+}
+
+.form-group {
+    margin-top:0px;
+    display: flex;
+}
+
+.form-group label {
+    font-size: 16px;
+    color: black;
+}
+
+.form-group input {
+    width: 40%;
+    height:30px;
+    font-size: 14px;
+    border: 1px solid black;
+    border-radius: 5px;
+    outline: none;
+    margin-left:50px;
+}
+
+
+
+.add-discount-button {
+    background-color: #5F4AE7;
+        width: 15%;
+    margin-left:240px;
+
+    color: white;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.add-discount-button:hover {
+    background-color: #3700b3;
+}
+
+/* Header */
+.header-container{
+    height: 40px;
+    width:1020px;
+    margin-top:160px;
+    margin-left: 40px;
+    background-color: #ADC1ED;
+    position: absolute;
+}
+
+.header-top{
+    font-size: 16px;
+    margin-top:10px;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    position :absolute;
+    color:black;
+}
+
+
+.content-container{
+    height:54%;
+    width:1020px;
+    margin-left: 40px;
+    top:110px;
+    background-color: white;
+    position: absolute;
+    overflow-y: auto;
+}
+
+.content-container .discount{
+    width:100%;
+    height: 40px;
+    margin-top:0px;
+    border-bottom: 1px solid black;
+    position: relative;
+}
+
+.dis-product-id {
+    color: black;
+    font-size: 16px;
+    margin-top: 10px; 
+    font-family: Arial, Helvetica, sans-serif;
+    left: 10px;
+    position: absolute; 
+    display: inline-block; 
+}
+
+.dis-product-name {
+    color: black;
+    font-size: 16px;
+    margin-top: 10px; 
+    font-family: Arial, Helvetica, sans-serif;
+    left: 130px;
+    position: absolute; 
+    display: inline-block; 
+}
+
+.dis-unit-price{
+    color: black;
+    font-size: 16px;
+    margin-top: 10px; 
+    font-family: Arial, Helvetica, sans-serif;
+    left: 510px;
+    position: absolute; 
+    display: inline-block; 
+}
+
+.dis-discount{
+    color: black;
+    font-size: 16px;
+    margin-top: 10px; 
+    font-family: Arial, Helvetica, sans-serif;
+    left: 650px;
+    position: absolute; 
+    display: inline-block; 
+}
+
+.dis-date{
+    color: black;
+    font-size: 16px;
+    margin-top: 10px; 
+    font-family: Arial, Helvetica, sans-serif;
+    left: 790px;
+    position: absolute; 
+    display: inline-block; 
+}
+
+.discount p, .discount div {
+    padding: 0 10px; 
+}
+
+.dis-actions {
+    display: flex; 
+    align-items: center;
+    left: 940px; 
+    position: absolute; 
+    top: 50%; 
+    transform: translateY(-50%);
+    
+}
+
+.delete {
+    text-decoration: none;
+    color: red;
+    cursor: pointer;
+}
+
+
+
+
