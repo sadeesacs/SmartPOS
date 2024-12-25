@@ -1,0 +1,491 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Roboto+Serif:ital,opsz,wght@0,8..144,100..900;1,8..144,100..900&display=swap');
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #F1F5FE;
+    overflow-x: hidden;
+    font-family: Arial, Helvetica, sans-serif;
+
+}
+
+.container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.header, .footer {
+    flex-shrink: 0;
+}
+
+
+/* navigation panel of Smart POS Dshboard*/
+.navigation {
+    height: 100%;
+    background-color: white;
+    width: 300px;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25)
+}
+
+.Logo {
+    width: 40px;
+    height: 40px;
+    left:40px;
+    top: 8px;
+    position: absolute;
+    display:flex;
+}
+
+.logoname {
+    color: black;
+    font-size: 33px;
+    font-family: Playfair Display;
+    font-weight: 700;
+    word-wrap: break-word;
+    left: 95px;
+    top: 7px;
+    position: absolute;
+}
+
+.logoname a {
+    text-decoration: none; 
+    color: inherit;
+    cursor: pointer;
+}
+
+.nav-menu {
+    list-style-type: none;
+    padding: 0px 0;
+    width:80%;
+    margin-left: 10%;
+    margin-top:80px;
+}
+
+.nav-menu a {
+    text-decoration: none; 
+    color: inherit;
+    cursor: pointer;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    color: black;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-bottom: 15px;
+}
+
+.nav-item span{
+    font-size: 18px;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    color:black;
+}
+
+.nav-item img {
+    font-size: 20px;
+    margin-right: 50px;
+}
+
+.nav-item.active {
+    background-color: #5F4AE7;
+    color: white;
+    font-weight: bold;
+    border-radius: 10px;
+}
+
+.nav-item.active span{
+    color: white;
+}
+
+.logout {
+    padding: 10px;
+    display: flex;
+    cursor: pointer;
+    position: absolute;
+    margin-top: 640px;
+    margin-left:40px;
+    background-color:#F3F7FF;
+    border:none;
+    height:45px;
+    border-radius: 10px;
+    width:200px;
+}
+
+.logout img {
+    font-size: 18px;
+    margin-right: 15px;
+}
+
+.logout span {
+    font-size: 18px;
+    color:black;
+    margin-left: 35px;
+    margin-top:5px;
+    font-weight: bold;
+}
+
+/*Notification icon*/
+.notfication-icon{
+    position: absolute;
+    left: 81%;
+    top:20px;
+    color: #6c63ff; 
+    width:30px;
+    height:35px;
+    cursor: pointer;
+}
+
+/* user profile view Container styling */
+.user-profile {
+    position: absolute;
+    left: 85%;
+    top:15px;
+    display: flex;
+    border: 2px solid #5F4AE7; 
+    border-radius: 50px;
+    background-color: #ffffff;
+    font-family: Arial, sans-serif;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    gap: 10px;
+    width:165px;
+    height:40px;
+}
+
+.user-avatar {
+    margin-left:10px;
+    margin-top:1px;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    margin-top:5px;
+}
+
+.user-name {
+    font-weight: bold;
+    color: #000;
+}
+
+.user-role {
+    font-size: 12px;
+    color: #808080; 
+}
+
+.main-header{
+    position: absolute;
+    top:50px;
+    left: 360px;
+    font-size:35px;
+    color:black;
+    font-weight: bold;
+}
+
+.middle-container{
+    height: 82%;
+    width:1105px;
+    left:360px;
+    top:125px;
+    border-radius: 5px;
+    background-color: transparent;
+    position: absolute;
+}
+
+
+/*Reports navigation section*/
+.report-nav {
+    display: flex;
+    position: absolute;
+    display: flex;
+    margin-top: 0px;
+    width:100% ;
+}
+
+.report-nav button {
+    background-color: white;
+    color: black;
+    width:25%;
+    height: 40px;
+    border:none;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.report-nav button.active {
+    background-color: #5F4AE7;
+    color:white;
+}
+
+/*Reports Slides styling*/
+.report-slides {
+    position: relative;
+    width: 100%;
+    height: 93%;
+    margin-top: 40px;
+    overflow: hidden;
+}
+
+.report-slide {
+    position: absolute;
+    top: 0;
+    left: 100%; 
+    width: 100%;
+    height: 100%;
+}
+
+.report-slide.active {
+    left: 0; 
+}
+
+/* Container for the date picker */
+.date-picker-container {
+  display: flex;
+  align-items: center;
+  gap: 80px; 
+  padding: 30px 0px;
+  border-radius: 5px;
+}
+
+.date-label {
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+}
+
+.custom-date-picker {
+  border: 1px solid black; 
+  border-radius: 5px;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-family: Arial, sans-serif;
+  width: 230px;
+  box-shadow: none;
+  transition: border-color 0.3s ease;
+}
+
+.custom-date-picker:focus {
+  border-color: #6200ee;
+  outline: none;
+}
+
+.search-button {
+  background-color: #5F4AE7; 
+  color: #fff; 
+  border: none;
+  border-radius: 5px;
+  padding: 8px 30px;
+  font-size: 14px;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.search-button:hover {
+  background-color: #3700b3; 
+}
+
+/* Container for the month picker */
+.month-picker-container {
+  display: flex;
+  align-items: center;
+  gap: 80px; 
+  padding: 30px 0px;
+  border-radius: 5px;
+}
+
+.month-label {
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+}
+
+.custom-month-picker {
+  border: 1px solid black; 
+  border-radius: 5px;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-family: Arial, sans-serif;
+  width: 230px;
+  background-color: white;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+
+.custom-month-picker:focus {
+  border-color: #6200ee; 
+  outline: none;
+}
+
+.month-search-button {
+  background-color: #5F4AE7; 
+  color: #fff; 
+  border: none;
+  border-radius: 5px;
+  padding: 8px 30px;
+  font-size: 14px;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.month-search-button:hover {
+  background-color: #3700b3; 
+}
+
+/*Content Listing Styles*/
+.header-container{
+    height: 40px;
+    width:100%;
+    margin-top:15px;
+    background-color: #ADC1ED;
+    position: absolute;
+}
+
+.header-top{
+    font-size: 16px;
+    margin-top:10px;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    position :absolute;
+    color:black;
+}
+
+.content-container{
+    height: 50%;
+    position: absolute;
+    width:100%;
+    top:0px;
+    background-color: transparent;
+    position: absolute;
+    overflow-y: auto;
+    -ms-overflow-style: none; 
+    scrollbar-width: none;
+}
+
+.content-container::-webkit-scrollbar {
+    display: none;
+}
+
+.content-container .pro-stock{
+    width:100%;
+    height: 40px;
+    margin-top:0px;
+    border-bottom: 1px solid black;
+    position: relative;
+}
+
+.pro-stock-id {
+    color: black;
+    font-size: 16px;
+    margin-top: 10px; 
+    font-family: Arial, Helvetica, sans-serif;
+    left: 10px;
+    position: absolute; 
+    display: inline-block; 
+}
+
+.pro-stock-name {
+    color: black;
+    font-size: 16px;
+    margin-top: 10px; 
+    font-family: Arial, Helvetica, sans-serif;
+    left: 210px;
+    position: absolute; 
+    display: inline-block; 
+}
+
+.pro-stock-quantity
+{
+    color: black;
+    font-size: 16px;
+    margin-top: 10px; 
+    font-family: Arial, Helvetica, sans-serif;
+    left: 670px;
+    position: absolute; 
+    display: inline-block; 
+}
+
+.pro-high-revenue{
+    color: black;
+    font-size: 16px;
+    margin-top: 10px; 
+    font-family: Arial, Helvetica, sans-serif;
+    left: 670px;
+    position: absolute; 
+    display: inline-block; 
+}
+
+.pro-high-unitsold{
+    color: black;
+    font-size: 16px;
+    margin-top: 10px; 
+    font-family: Arial, Helvetica, sans-serif;
+    left: 900px;
+    position: absolute; 
+    display: inline-block; 
+}
+
+.pro-stock-status{
+    color: black;
+    font-size: 16px;
+    margin-top: 10px; 
+    font-family: Arial, Helvetica, sans-serif;
+    left: 900px;
+    position: absolute; 
+    display: inline-block;
+    font-weight: bold;
+}
+
+.pro-stock-status.in-stock {
+  color: green;
+}
+
+.pro-stock-status.out-of-stock {
+  color: red;
+}
+
+.pro-stock-status.low-stock {
+  color: orange;
+}
+
+.pro-stock p, .pro-stock div {
+    padding: 0 10px; 
+}
+
+.chart-container {
+    background-color: white;
+    width: 100%;
+    margin-top:0px;
+    height:78%;
+}
+
+.chart-container h2{
+    position: absolute;
+    margin-top:20px;
+    margin-left:30px;
+}
+
+.monthly-revenue{
+    position: absolute;
+    margin-top:20px;
+    margin-left:80%;
+    font-size: 27px;
+    color:red;
+}

@@ -3,7 +3,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Customers</title>
+        <title>Product Catalog</title>
         <link rel="stylesheet" href="StyleSheet5.css" />
 
     </head>
