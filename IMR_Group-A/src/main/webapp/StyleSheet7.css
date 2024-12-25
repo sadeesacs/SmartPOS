@@ -220,8 +220,7 @@ html, body {
     display: flex;
     flex-direction: column;
     gap: 10px;
-        margin-left: 40px;
-
+    margin-left: 40px;
 }
 
 .form-group {
@@ -244,13 +243,10 @@ html, body {
     margin-left:50px;
 }
 
-
-
 .add-discount-button {
     background-color: #5F4AE7;
-        width: 15%;
+    width: 15%;
     margin-left:240px;
-
     color: white;
     padding: 10px 20px;
     font-size: 14px;
@@ -283,7 +279,6 @@ html, body {
     position :absolute;
     color:black;
 }
-
 
 .content-container{
     height:54%;
@@ -364,7 +359,6 @@ html, body {
     position: absolute; 
     top: 50%; 
     transform: translateY(-50%);
-    
 }
 
 .delete {
