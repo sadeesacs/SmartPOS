@@ -5,7 +5,6 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Customers</title>
         <link rel="stylesheet" href="StyleSheet1.css" />
-
     </head>
     <body>
         
