@@ -9,7 +9,6 @@ html, body {
     background-color: #F1F5FE;
     overflow-x: hidden;
     font-family: Arial, Helvetica, sans-serif;
-
 }
 
 .container {
@@ -359,6 +358,7 @@ html, body {
     top: 50%; 
     transform: translateY(-50%);
 }
+
 .view 
 {
     text-decoration: none;
@@ -366,3 +366,194 @@ html, body {
     cursor: pointer;
    
 }
+
+
+
+
+
+
+
+
+/* Modal Styling */
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4); 
+    overflow: hidden; 
+}
+
+.modal-content {
+    background-color: white;
+    position: fixed; 
+    margin: 0 auto;
+    padding: 20px;
+    width: 30%; 
+    height: 85%;
+    top: 5%; 
+    left: 35%;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    overflow: hidden; 
+}
+
+.modal-content .modal-body {
+    height: 100%;
+    overflow-y: auto; 
+}
+
+.modal-body::-webkit-scrollbar {
+    width: 0; 
+}
+
+.modal-body {
+    scrollbar-width: none; 
+}
+
+.modal-body {
+    -ms-overflow-style: none;
+}
+
+.close-product-slider {
+    width: 30px;
+    height: 25px;
+    margin-top: -7px;
+    margin-left:88%;
+    position: absolute;
+    cursor: pointer;
+}
+
+.receipt-header {
+    display: flex;
+    margin-left: 25%;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.rec-Logo {
+    width: 40px;
+    height: 40px;
+    display:flex;
+}
+
+.rec-logoname {
+    color: black;
+    font-size: 33px;
+    font-family: Playfair Display;
+    font-weight: 700;
+    word-wrap: break-word;
+    margin-left:20px;
+}
+
+.bill-details {
+    margin-top: 20px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    color: black;
+}
+
+.bill-detail-row {
+    display: flex;
+    margin-bottom: 15px;
+}
+
+.detail-label {
+    font-weight: bold;
+    color: black;
+}
+
+.detail-value {
+    left:100px;
+    font-weight: normal;
+    color: black;
+}
+
+.bill-summary {
+    margin-top: 10px; 
+    padding-top: 10px;
+    font-size: 14px;
+    border-top: 1px solid #ddd; 
+}
+
+.bill-summary p {
+    display: flex;
+    justify-content: space-between;
+    margin: 5px 0;
+}
+
+.bill-summary p:last-child {
+    font-size: 18px;
+    font-weight: bold;
+    color: black;
+}
+
+.billDetails-header-container {
+    margin-top:30px;
+    height: 30px;
+    width: 98%;
+    background-color: #ADC1ED;
+    display: flex; 
+    align-items: center;
+    padding: 0 5px; 
+}
+
+.bill-header-top {
+    font-size: 13px;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    color: black;
+    text-align: left;
+    flex: 1; 
+}
+
+.header-id {
+    flex: 0.5;
+    text-align: center; 
+}
+
+.header-description {
+    flex: 3; 
+    text-align: left;
+    padding-left: 5px; 
+}
+
+.header-qty, .header-unit-price, .header-subtotal {
+    flex: 1; 
+    text-align: center;
+}
+
+.item {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.item p {
+    flex: 1;
+    margin: 0;
+    font-size: 14px;
+    text-align: center; 
+}
+
+.item .item-id {
+    flex: 0.5;
+    text-align: center;
+}
+
+.item .item-desc {
+    flex: 3;
+    text-align: left;
+    padding-left: 5px;
+}
+
+.item .item-qty,
+.item .item-price,
+.item .item-total {
+    flex: 1;
+    text-align: center;
+}
+
+
