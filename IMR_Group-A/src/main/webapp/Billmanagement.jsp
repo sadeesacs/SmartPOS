@@ -1,17 +1,10 @@
-<%-- 
-    Document   : Billmanagement
-    Created on : Dec 25, 2024, 11:00:46 AM
-    Author     : User
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Bills</title>
-        <link rel="stylesheet" href="StyleSheet1.css" />
-        <link rel="stylesheet" href="StyleSheetbill.css" />
+        <link rel="stylesheet" href="StyleSheet8.css" />
 
     </head>
     <body>
@@ -105,52 +98,40 @@
         <div class="main-header">
             Bill Management
         </div>
-    <!--Middle Container for content-->
+        <!--Middle Container for content-->
         <div class="middle-container">
             <!-- Search Bar Container -->
-        <div class="add-search-container">
-          <h2 required style="margin-left: 40px;">Search Bill Details</h2>
-            <div class="form-group">
-                <label for="Recieptnumber" required style="margin-left: 40px;">Enter Receipt Number</label>
-                <input type="text" id="Recieptnumber" name="Recieptnumber" required style="margin-left: 30px;" >
-                <button class="search-button">Search</button>
+            <div class="add-search-container">
+                <h2 required style="margin-left: 40px;">Search Bill Details</h2>
+                <div class="form-group">
+                    <label for="Recieptnumber" required style="margin-left: 40px;">Enter Receipt Number</label>
+                    <input type="text" id="Recieptnumber" name="Recieptnumber" required style="margin-left: 50px;" >
+                    <button class="search-button">Search</button>
+                </div>
             </div>
-        </div>
     
 
-    <div class="header-container" style="top:100px;">
+            <div class="header-container" style="top:100px;">
                 <span class="header-top" style="margin-left:20px">Receipt Number</span>
                 <span class="header-top" style="margin-left:240px">No of Items</span>
-                <div class="header-top" style="margin-left:420px">Date</div>
+                <div class="header-top" style="margin-left:410px">Date</div>
                 <div class="header-top" style="margin-left:570px">Time</div>
-                <div class="header-top" style="margin-left:700px">Total amount</div>
-                <div class="header-top" style="margin-left:900px">Action</div>                  
+                <div class="header-top" style="margin-left:720px">Total amount</div>
+                <div class="header-top" style="margin-left:920px">Action</div>                  
             </div>
-                <div class="content-container" style="margin-top:80px;height: 70%">
+            <div class="content-container" style="margin-top:80px;">
                 <div class="Receipt">
                     <p class="Rec-no">#12500</p>
                     <p class="Rec-iteam">20</p>
                     <p class="Rec-date">2024-12-20</p>
                     <p class="Rec-time">16.00PM</p>
                     <p class="Rec-totalamount">12,500</p>
-                    
                     <div class="Rec-action">
                         <div class="view"><i class="bi bi-eye-fill"></i></div>
                     </div> 
                 </div>
-                   
-                <div class="Receipt">
-                    <p class="Rec-no">#12500</p>
-                    <p class="Rec-iteam">20</p>
-                    <p class="Rec-date">2024-12-20</p>
-                    <p class="Rec-time">16.00PM</p>
-                    <p class="Rec-totalamount">12,500</p>
-                    
-                    <div class="Rec-action">
-                        <div class="view"><i class="bi bi-eye-fill"></i></div>
-                    </div> 
-                </div>
-        </div>
+                
+            </div>
         </div>
         
     </body>
