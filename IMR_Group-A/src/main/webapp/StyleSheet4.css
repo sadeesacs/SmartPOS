@@ -1,0 +1,547 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Roboto+Serif:ital,opsz,wght@0,8..144,100..900;1,8..144,100..900&display=swap');
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #F1F5FE;
+    overflow-x: hidden;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.header, .footer {
+    flex-shrink: 0;
+}
+
+
+/* navigation panel of Smart POS Dshboard*/
+.navigation {
+    height: 100%;
+    background-color: white;
+    width: 300px;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25)
+}
+
+.Logo {
+    width: 40px;
+    height: 40px;
+    left:40px;
+    top: 8px;
+    position: absolute;
+    display:flex;
+}
+
+.logoname {
+    color: black;
+    font-size: 33px;
+    font-family: Playfair Display;
+    font-weight: 700;
+    word-wrap: break-word;
+    left: 95px;
+    top: 7px;
+    position: absolute;
+}
+
+.logoname a {
+    text-decoration: none; 
+    color: inherit;
+    cursor: pointer;
+}
+
+.nav-menu {
+    list-style-type: none;
+    padding: 0px 0;
+    width:80%;
+    margin-left: 10%;
+    margin-top:80px;
+}
+
+.nav-menu a {
+    text-decoration: none; 
+    color: inherit;
+    cursor: pointer;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    color: black;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-bottom: 15px;
+}
+
+.nav-item span{
+    font-size: 18px;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    color:black;
+}
+
+.nav-item img {
+    font-size: 20px;
+    margin-right: 50px;
+}
+
+.nav-item.active {
+    background-color: #5F4AE7;
+    color: white;
+    font-weight: bold;
+    border-radius: 10px;
+}
+
+.nav-item.active span{
+    color: white;
+}
+
+.logout {
+    padding: 10px;
+    display: flex;
+    cursor: pointer;
+    position: absolute;
+    margin-top: 640px;
+    margin-left:40px;
+    background-color:#F3F7FF;
+    border:none;
+    height:45px;
+    border-radius: 10px;
+    width:200px;
+}
+
+.logout img {
+    font-size: 18px;
+    margin-right: 15px;
+}
+
+.logout span {
+    font-size: 18px;
+    color:black;
+    margin-left: 35px;
+    margin-top:5px;
+    font-weight: bold;
+}
+
+/*Notification icon*/
+.notfication-icon{
+    position: absolute;
+    left: 81%;
+    top:20px;
+    color: #6c63ff; 
+    width:30px;
+    height:35px;
+    cursor: pointer;
+}
+
+/* user profile view Container styling */
+.user-profile {
+    position: absolute;
+    left: 85%;
+    top:15px;
+    display: flex;
+    border: 2px solid #5F4AE7; 
+    border-radius: 50px;
+    background-color: #ffffff;
+    font-family: Arial, sans-serif;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    gap: 10px;
+    width:165px;
+    height:40px;
+}
+
+.user-avatar {
+    margin-left:10px;
+    margin-top:1px;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    margin-top:5px;
+}
+
+.user-name {
+    font-weight: bold;
+    color: #000;
+}
+
+.user-role {
+    font-size: 12px;
+    color: #808080; 
+}
+
+.main-header{
+    position: absolute;
+    top:50px;
+    left: 360px;
+    font-size:35px;
+    color:black;
+    font-weight: bold;
+}
+
+.middle-container{
+    height: 82%;
+    width:1105px;
+    left:360px;
+    top:125px;
+    border-radius: 5px;
+    background-color: transparent;
+    position: absolute;
+}
+
+
+/*Stock Management Webpage Styling*/
+.stock-nav {
+    display: flex;
+    position: absolute;
+    display: flex;
+    margin-top: 0px;
+    width:100% ;
+}
+
+.stock-nav button {
+    background-color: white;
+    color: black;
+    width:25%;
+    height: 40px;
+    border:none;
+    cursor: pointer;
+    font-weight: bold;
+    font-size:16px;
+    transition: background-color 0.3s;
+}
+
+.stock-nav button.active {
+    background-color: #5F4AE7;
+    color:white;
+}
+
+.stock-slides {
+    position: relative;
+    width: 100%;
+    height: 93%;
+    margin-top: 40px;
+    overflow: hidden;
+}
+
+.stock-slide {
+    position: absolute;
+    top: 0;
+    left: 100%; 
+    width: 100%;
+    height: 100%;
+}
+
+.stock-slide.active {
+    left: 0; 
+}
+
+.add-button{
+    width:125px;
+    height:35px;
+    margin-left:980px;
+    margin-top: 20px;
+    position: absolute;
+    border:3px solid #5F4AE7;
+    border-radius: 10px;
+    display: flex;
+    background-color: #5F4AE7;
+    cursor: pointer;
+    font-size: 15px
+}
+
+.add-button p{
+    font-size: 18px;
+    color:white;
+    font-family: Arial, Helvetica, sans-serif;
+    margin-top:5px;
+    margin-left: 20px;
+    position: absolute;
+}
+
+.add-button div{
+    font-size: 20px;
+    color:white;
+    font-weight: bold;
+    margin-top:3px;
+    margin-left:0px;
+    font-weight: bold;
+    position: absolute;
+}
+
+.header-container{
+    height: 40px;
+    width:100%;
+    margin-top:80px;
+    background-color: #ADC1ED;
+    position: absolute;
+}
+
+.header-top{
+    font-size: 16px;
+    margin-top:10px;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    position :absolute;
+    color:black;
+}
+
+.content-container{
+    height: 50%;
+    position: absolute;
+    width:100%;
+    margin-top:120px;
+    background-color: transparent;
+    position: absolute;
+    overflow-y: auto;
+    -ms-overflow-style: none; 
+    scrollbar-width: none;
+}
+
+.content-container::-webkit-scrollbar {
+    display: none;
+}
+
+.content-container .pro-stock{
+    width:100%;
+    height: 40px;
+    margin-top:0px;
+    border-bottom: 1px solid black;
+    position: relative;
+}
+
+.pro-stock-id {
+    color: black;
+    font-size: 16px;
+    margin-top: 10px; 
+    font-family: Arial, Helvetica, sans-serif;
+    left: 10px;
+    position: absolute; 
+    display: inline-block; 
+}
+
+.pro-stock-name {
+    color: black;
+    font-size: 16px;
+    margin-top: 10px; 
+    font-family: Arial, Helvetica, sans-serif;
+    left: 140px;
+    position: absolute; 
+    display: inline-block; 
+}
+
+.pro-stock-quantity
+{
+    color: black;
+    font-size: 16px;
+    margin-top: 10px; 
+    font-family: Arial, Helvetica, sans-serif;
+    left: 580px;
+    position: absolute; 
+    display: inline-block; 
+}
+
+.pro-stock-mandate{
+    color: black;
+    font-size: 16px;
+    margin-top: 10px; 
+    font-family: Arial, Helvetica, sans-serif;
+    left: 690px;
+    position: absolute; 
+    display: inline-block; 
+}
+
+.pro-C-stock-mandate{
+    color: black;
+    font-size: 16px;
+    margin-top: 10px; 
+    font-family: Arial, Helvetica, sans-serif;
+    left: 710px;
+    position: absolute; 
+    display: inline-block; 
+}
+
+.pro-stock-expirydate{
+    color: black;
+    font-size: 16px;
+    margin-top: 10px; 
+    font-family: Arial, Helvetica, sans-serif;
+    left: 870px;
+    position: absolute; 
+    display: inline-block; 
+}
+
+.pro-C-stock-expirydate{
+    color: black;
+    font-size: 16px;
+    margin-top: 10px; 
+    font-family: Arial, Helvetica, sans-serif;
+    left: 910px;
+    position: absolute; 
+    display: inline-block; 
+}
+
+.pro-stock p, .pro-stock div {
+    padding: 0 10px; 
+}
+
+.stock-actions {
+    display: flex; 
+    align-items: center;
+    left: 1010px; 
+    position: absolute; 
+    top: 50%; 
+    transform: translateY(-50%);
+}
+
+.edit {
+    text-decoration: none;
+    color: #F5C51B;
+    cursor: pointer;
+}
+
+.delete {
+    text-decoration: none;
+    color: red;
+    cursor: pointer;
+}
+
+
+/* Stock management webpage slider Styling*/
+.product-slider {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    height: 100%;
+    width: 30%;
+    background-color: white;
+    transition: 0.5s;
+    z-index: 1000;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.product-slider.active {
+    right: 0;
+}
+
+.product-slider-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.product-slider-header {
+    display: flex;
+    color: white;
+    justify-content: space-between;
+    flex-direction: column;
+    margin-top: 20px;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.product-slider-title {
+    font-size:27px;
+    font-weight: bold;
+    margin-left: 32px;
+    color:black;
+}
+
+.close-product-slider {
+    width: 51px;
+    height: 42px;
+    margin-top: -7px;
+    margin-left:85%;
+    position: absolute;
+    cursor: pointer;
+}
+
+.product-slider-hline{
+    margin-top: 5px;
+    margin-left: 0px;
+    position: relative;
+} 
+
+.product-slider-form {
+    flex-grow: 1; 
+    overflow-y: auto; 
+    box-sizing: border-box;
+    overflow-x: hidden;
+    margin-top:35px;
+}
+
+.product-form-row {
+    display: flex;
+    flex-direction: column; 
+    align-items: flex-start; 
+    margin-bottom: 30px;
+    width: 100%;
+    padding-left: 25px; 
+}
+
+.product-form-label {
+    font-size: 18px;
+    margin-left: 10px;
+    font-weight: bold;
+    color: rgba(102, 102, 102, 1);
+    margin-bottom: 10px; 
+}
+
+.form-product-text {
+    border-radius: 5px;
+    background-color: #F1F5FE;
+    margin-left: 10px;
+    border: 1px solid #B9CAF0;
+    color: black; 
+    width: 85%;
+    height: 35px;
+    padding: 5px; 
+    box-sizing: border-box; 
+}
+
+.form-save-but {
+    width: 30%;
+    height: 40px;
+    background-color: #5F4AE7; 
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-left: 36px;
+    align-self: center; 
+    transition: background-color 0.3s ease;
+    margin-bottom: 15px;
+}
+
+.form-save-but:hover {
+    background-color: #3f2ecb; 
+}
+
+
+
+
+
+
+
+
+
+
+
+
