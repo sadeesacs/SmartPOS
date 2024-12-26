@@ -107,12 +107,14 @@
         </div>
     <!--Middle Container for content-->
         <div class="middle-container">
-            <h3>Search Bill Details</h3>
             <!-- Search Bar Container -->
-        <div class="search-container">
-            <label for="search-bar">Enter Receipt Number</label>
-            <input type="text" id="search-bar" class="search-bar" placeholder="Search by receipt number" onkeyup="searchBills()">
-            <button class="search-button">Search</button>
+        <div class="add-search-container">
+          <h2 required style="margin-left: 40px;">Search Bill Details</h2>
+            <div class="form-group">
+                <label for="Recieptnumber" required style="margin-left: 40px;">Enter Receipt Number</label>
+                <input type="text" id="Recieptnumber" name="Recieptnumber" required style="margin-left: 30px;" >
+                <button class="search-button">Search</button>
+            </div>
         </div>
     
 
