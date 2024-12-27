@@ -21,14 +21,13 @@ import jakarta.servlet.http.HttpServletResponse;
 public class SystemUsersServlet extends HttpServlet {
     
     private UserDAO userDAO = new UserDAO();
-
     
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("userID") == null) {
-            // If no session, redirect to Login page (or an error page)
             response.sendRedirect("Login.jsp");
             return;
         }
@@ -36,15 +35,18 @@ public class SystemUsersServlet extends HttpServlet {
         int currentUserID = (int) session.getAttribute("userID");
         String currentRole = userDAO.getUserRoleByID(currentUserID);
 
+        
+        User loggedUser = userDAO.getUserByID(currentUserID);
+        request.setAttribute("loggedUser", loggedUser);
+
         List<User> userList = null;
         if ("Admin".equalsIgnoreCase(currentRole)) {
-            // Admin sees everyone
             userList = userDAO.getAllUsers();
-        } else if ("Manager".equalsIgnoreCase(currentRole)) {
-            // Manager sees themselves + all Cashiers
+        } 
+        else if ("Manager".equalsIgnoreCase(currentRole)) {
             userList = userDAO.getManagerView(currentUserID);
-        } else if ("Cashier".equalsIgnoreCase(currentRole)) {
-            // Cashier sees only themselves
+        } 
+        else if ("Cashier".equalsIgnoreCase(currentRole)) {
             User cashier = userDAO.getCashierView(currentUserID);
             if (cashier != null) {
                 userList = Collections.singletonList(cashier);
@@ -55,7 +57,6 @@ public class SystemUsersServlet extends HttpServlet {
         request.setAttribute("currentRole", currentRole);
         request.setAttribute("currentUserID", currentUserID);
 
-        // Forward to JSP
         request.getRequestDispatcher("SystemUsers.jsp").forward(request, response);
     }
 
@@ -76,8 +77,12 @@ public class SystemUsersServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String action = request.getParameter("action");
 
-        if ("add".equalsIgnoreCase(action)) {
-            // Only Manager or Admin can add users
+        if ("logout".equalsIgnoreCase(action)) {
+            session.invalidate();
+            response.sendRedirect("Login.jsp");
+            return;
+        }
+        else if ("add".equalsIgnoreCase(action)) {
             if ("Manager".equalsIgnoreCase(currentRole) || "Admin".equalsIgnoreCase(currentRole)) {
                 String fullName = request.getParameter("fullName");
                 String nic      = request.getParameter("nic");
@@ -92,7 +97,6 @@ public class SystemUsersServlet extends HttpServlet {
             }
 
         } else if ("update".equalsIgnoreCase(action)) {
-            // Update user details (FullName, NIC, Role)
             int userID = Integer.parseInt(request.getParameter("userID"));
             User targetUser = userDAO.getUserByID(userID);
 
@@ -106,7 +110,6 @@ public class SystemUsersServlet extends HttpServlet {
             }
 
         } else if ("delete".equalsIgnoreCase(action)) {
-            // Delete a user
             int userID = Integer.parseInt(request.getParameter("userID"));
             User targetUser = userDAO.getUserByID(userID);
             if (targetUser != null) {
@@ -116,7 +119,6 @@ public class SystemUsersServlet extends HttpServlet {
             }
 
         } else if ("changePassword".equalsIgnoreCase(action)) {
-            // The user can change their own password
             int userID = Integer.parseInt(request.getParameter("userID"));
             String oldPassword = request.getParameter("oldPassword");
             String newPassword = request.getParameter("newPassword");
@@ -124,11 +126,17 @@ public class SystemUsersServlet extends HttpServlet {
             if (userID == currentUserID) {
                 String oldHashed = PasswordUtil.hashPasswordSHA512(oldPassword);
                 String newHashed = PasswordUtil.hashPasswordSHA512(newPassword);
-                userDAO.changePassword(userID, oldHashed, newHashed);
+                boolean success = userDAO.changePassword(userID, oldHashed, newHashed);
+                
+                if (!success) {
+                    request.setAttribute("pwdError", "Incorrect current password!");
+                    request.setAttribute("showPwdModal", "true");
+                    doGet(request, response);
+                    return;
+                }
             }
         }
-
-        // Refresh the list
+        
         response.sendRedirect("SystemUsersServlet");
     }
     
@@ -137,32 +145,27 @@ public class SystemUsersServlet extends HttpServlet {
         int targetID = targetUser.getUserID();
 
         if ("Admin".equalsIgnoreCase(currentRole)) {
-            return true; // Admin can edit everyone
-        } else if ("Manager".equalsIgnoreCase(currentRole)) {
-            // Manager can edit themselves + any Cashier
-            if (targetID == currentUserID) return true;
-            if ("Cashier".equalsIgnoreCase(targetRole)) return true;
-        } else if ("Cashier".equalsIgnoreCase(currentRole)) {
-            // Cashier can only edit themselves (really only the password in your specs)
+            return true;
+        }
+        else if ("Manager".equalsIgnoreCase(currentRole)) {
+            if (targetID == currentUserID) return true; 
+            if ("Cashier".equalsIgnoreCase(targetRole)) return true; 
+        }
+        else if ("Cashier".equalsIgnoreCase(currentRole)) {
             if (targetID == currentUserID) return true;
         }
         return false;
     }
 
-    /**
-     * Determines if the current user can delete the target user.
-     */
     private boolean canDeleteUser(String currentRole, int currentUserID, User targetUser) {
         String targetRole = targetUser.getRole();
 
         if ("Admin".equalsIgnoreCase(currentRole)) {
-            // Admin can delete anyone, including themselves
             return true;
-        } else if ("Manager".equalsIgnoreCase(currentRole)) {
-            // Manager can delete only Cashiers, not themselves or other managers/admins
+        } 
+        else if ("Manager".equalsIgnoreCase(currentRole)) {
             return "Cashier".equalsIgnoreCase(targetRole);
         }
-        // Cashiers cannot delete anyone
         return false;
     }
 }

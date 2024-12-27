@@ -9,7 +9,7 @@
     </head>
     <body>
         
-        <!-- Navigational Panel -->
+        <!-- Navigational Panel of the Smart POS System -->
         <div class="navigation">
             <div class="Logo"><img src="images/icons/logo.png" /></div>
             <div class="logoname"><a href="Dashboard.jsp">Smart <span style="color:#5F4AE7">POS</span></a></div>
@@ -70,25 +70,36 @@
                     </li>
                 </a>
             </ul>
-            <button class="logout">
-                <img src="images/icons/Logout.png" />
-                <span>Logout</span>
-            </button>
+            
+            <form method="post" action="SystemUsersServlet">
+                <input type="hidden" name="action" value="logout" />
+                <button class="logout">
+                    <img src="images/icons/Logout.png"/>
+                    <span>Logout</span>
+                </button>
+            </form>
         </div>
         
-        <!--Notification Icon-->
+        <!--Notification Icon of the header-->
         <div class="notfication-icon">
             <img src="images/icons/notify-icon.png">
         </div>
         
-        <!--User Profile View-->
+        <!--User Profile View of the header-->
         <div class="user-profile">
             <div class="user-avatar">
               <img src="images/icons/usericon.png">
             </div>
             <div class="user-info">
-              <span class="user-name"><!-- Could show name if desired --></span>
-              <span class="user-role"><!-- Could show role if desired --></span>
+              <%
+                  User loggedUser = (User) request.getAttribute("loggedUser");
+                  if (loggedUser != null) {
+              %>
+                  <span class="user-name"><%= loggedUser.getFullName() %></span>
+                  <span class="user-role"><%= loggedUser.getRole() %></span>
+              <%
+                  }
+              %>
             </div>
         </div>
         
@@ -99,7 +110,6 @@
         
         <!--Middle Container-->
         <div class="middle-container">
-            <!-- Only show the Add button if role is Manager or Admin -->
             <%
                 String currentRole = (String) request.getAttribute("currentRole");
                 if ("Manager".equalsIgnoreCase(currentRole) || "Admin".equalsIgnoreCase(currentRole)) {
@@ -134,7 +144,10 @@
                         <div class="cus-actions">
                             <!-- EDIT button -->
                             <div class="edit" 
-                                 onclick="showEditSlider(<%= u.getUserID() %>, '<%= u.getFullName() %>', '<%= u.getNic() %>', '<%= u.getRole() %>')">
+                                 onclick="showEditSlider(<%= u.getUserID() %>, 
+                                                         '<%= u.getFullName() %>', 
+                                                         '<%= u.getNic() %>', 
+                                                         '<%= u.getRole() %>')">
                                 <i class="bi bi-pencil-fill"></i>
                             </div>
                             <!-- DELETE button -->
@@ -151,7 +164,7 @@
         </div>
         
         
-        <!--Add User Slider-->
+        <!--Add Item Slider-->
         <div class="Customer-slider" id="adduserSlider">
             <div class="customer-slider-container">
                 <div class="customer-slider-header">
@@ -179,9 +192,20 @@
                                 <label class="cus-form-label">Role</label>
                                 <div class="user-role-select">
                                     <select name="role">
-                                        <option value="Manager">Manager</option>
-                                        <option value="Cashier">Cashier</option>
-                                        <option value="Admin">Admin</option>
+                                        <%
+                                            if ("Manager".equalsIgnoreCase(currentRole)) {
+                                        %>
+                                            <option value="Cashier">Cashier</option>
+                                            <option value="Manager">Manager</option>
+                                        <%
+                                            } else if ("Admin".equalsIgnoreCase(currentRole)) {
+                                        %>
+                                            <option value="Cashier">Cashier</option>
+                                            <option value="Manager">Manager</option>
+                                            <option value="Admin">Admin</option>
+                                        <%
+                                            }
+                                        %>
                                     </select>
                                 </div>
                             </div>
@@ -200,7 +224,7 @@
             </div>
         </div>
 
-        <!--Edit User Slider-->
+        <!--Edit Item Slider-->
         <div class="Customer-slider" id="edituserSlider">
             <div class="customer-slider-container">
                 <div class="customer-slider-header">
@@ -229,9 +253,6 @@
                                 <label class="cus-form-label">Role</label>
                                 <div class="user-role-select">
                                     <select id="edit-role" name="role">
-                                        <option value="Manager">Manager</option>
-                                        <option value="Cashier">Cashier</option>
-                                        <option value="Admin">Admin</option>
                                     </select>
                                 </div>
                             </div>
@@ -256,6 +277,14 @@
                     </div>
                 </div>
                 <div class="modal-body">
+                    <%
+                        String pwdError = (String) request.getAttribute("pwdError");
+                        if (pwdError != null) {
+                    %>
+                        <div style="color:red; margin-bottom:10px;"><%= pwdError %></div>
+                    <%
+                        }
+                    %>
                     <form action="SystemUsersServlet" method="post">
                         <input type="hidden" name="action" value="changePassword" />
                         <input type="hidden" name="userID" id="changePwd-userID" />
@@ -283,7 +312,6 @@
         </form>
 
         <script>
-            // Show/hide slider for adding user
             function showSlider() {
                 document.getElementById('adduserSlider').classList.add('active');
             }
@@ -291,21 +319,75 @@
                 document.getElementById('adduserSlider').classList.remove('active');
             }
 
-            // Show/hide slider for editing
             function showEditSlider(userID, fullName, nic, role) {
                 document.getElementById('edit-userID').value = userID;
                 document.getElementById('edit-fullName').value = fullName;
                 document.getElementById('edit-nic').value = nic;
-                document.getElementById('edit-role').value = role;
+
+                let currentRole = '<%= currentRole %>';
+                let currentUserID = '<%= request.getAttribute("currentUserID") %>';
+                let editRoleSelect = document.getElementById('edit-role');
+                editRoleSelect.innerHTML = "";
+
+                let isSelf = (currentUserID == userID);
+                
+                if (currentRole.toLowerCase() === 'admin') {
+                    editRoleSelect.add(new Option("Cashier", "Cashier"));
+                    editRoleSelect.add(new Option("Manager", "Manager"));
+                    editRoleSelect.add(new Option("Admin", "Admin"));
+                    editRoleSelect.disabled = false;
+                }
+                else if (currentRole.toLowerCase() === 'manager') {
+                    if (isSelf) {
+                        let opt = new Option(role, role);
+                        editRoleSelect.add(opt);
+                        editRoleSelect.disabled = true;
+                    } else {
+                        editRoleSelect.add(new Option("Cashier", "Cashier"));
+                        editRoleSelect.add(new Option("Manager", "Manager"));
+                        editRoleSelect.disabled = false;
+                    }
+                }
+                else if (currentRole.toLowerCase() === 'cashier') {
+                    let opt = new Option(role, role);
+                    editRoleSelect.add(opt);
+                    editRoleSelect.disabled = true;
+                }
+                
+                editRoleSelect.value = role; 
+
+                let editFullName = document.getElementById('edit-fullName');
+                let editNic = document.getElementById('edit-nic');
+
+                if (currentRole.toLowerCase() === 'admin') {
+                    editFullName.disabled = false;
+                    editNic.disabled = false;
+                }
+                else if (currentRole.toLowerCase() === 'manager') {
+                    if (isSelf) {
+                        editFullName.disabled = true;
+                        editNic.disabled = true;
+                    } else {
+                        editFullName.disabled = false;
+                        editNic.disabled = false;
+                    }
+                }
+                else if (currentRole.toLowerCase() === 'cashier') {
+                    if (isSelf) {
+                        editFullName.disabled = true;
+                        editNic.disabled = true;
+                    }
+                }
+
                 document.getElementById('edituserSlider').classList.add('active');
             }
+
             function hideEditSlider() {
                 document.getElementById('edituserSlider').classList.remove('active');
             }
             
             // Password Modal
             function openModal() {
-                // Current userID from the server
                 let currentUserID = '<%= request.getAttribute("currentUserID") %>';
                 document.getElementById('changePwd-userID').value = currentUserID;
                 document.getElementById("updatePasswordModal").style.display = "flex";
@@ -314,14 +396,22 @@
                 document.getElementById("updatePasswordModal").style.display = "none";
             }
 
-            // Delete confirmation
             function confirmDelete(userID) {
                 if (confirm("Are you sure you want to delete this user?")) {
                     document.getElementById('delete-userID').value = userID;
                     document.getElementById('deleteForm').submit();
                 }
             }
+            <%
+                String showPwdModal = (String) request.getAttribute("showPwdModal");
+                if ("true".equalsIgnoreCase(showPwdModal)) {
+            %>
+                document.addEventListener("DOMContentLoaded", function() {
+                    document.getElementById("updatePasswordModal").style.display = "flex";
+                });
+            <%
+                }
+            %>
         </script>
-        
     </body>
 </html>

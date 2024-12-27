@@ -15,12 +15,7 @@
             </div>
             
             <div class="login-form">
-                <!-- 
-                    We point to the LoginServlet for processing the login.
-                    method="POST" is standard for credentials. 
-                -->
                 <form method="POST" action="LoginServlet">
-                    <!-- Display an error if the request attribute "loginError" is present -->
                     <%
                         String loginError = (String) request.getAttribute("loginError");
                         if (loginError != null) {
@@ -29,14 +24,12 @@
                     <%
                         }
                     %>
-                    
                     <label for="username">User Name</label>
                     <input type="text" id="username" name="username" required>
 
                     <label for="password">Password</label>
                     <input type="password" id="password" name="password" required>
 
-                    <!-- Submit button -->
                     <button type="submit">Login</button>
                 </form>
             </div>
