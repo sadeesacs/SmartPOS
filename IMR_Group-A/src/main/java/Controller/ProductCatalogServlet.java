@@ -13,8 +13,9 @@ import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 
-@MultipartConfig
+
 @WebServlet(name = "ProductCatalogServlet", urlPatterns = {"/ProductCatalogServlet"})
+@MultipartConfig
 public class ProductCatalogServlet extends HttpServlet {
     
     private ProductDAO productDAO = new ProductDAO();
