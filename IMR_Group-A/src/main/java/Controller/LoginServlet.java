@@ -48,7 +48,7 @@ public class LoginServlet extends HttpServlet {
             session.setAttribute("userID", user.getUserID());
             
             // Redirect to SystemUsersServlet or any other page
-            response.sendRedirect("SystemUsersServlet");
+            response.sendRedirect("ProductCatalogServlet");
         }
     }
     
