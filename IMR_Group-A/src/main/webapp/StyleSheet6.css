@@ -9,6 +9,7 @@ html, body {
     background-color: #F1F5FE;
     overflow-x: hidden;
     font-family: Arial, Helvetica, sans-serif;
+
 }
 
 .container {
@@ -193,37 +194,166 @@ html, body {
 }
 
 .middle-container{
-    height: 78%;
+    height: 82%;
     width:1105px;
     left:360px;
     top:125px;
+    border-radius: 5px;
     background-color: transparent;
     position: absolute;
 }
 
-.POS-display-container{
+
+/*Reports navigation section*/
+.report-nav {
+    display: flex;
     position: absolute;
+    display: flex;
     margin-top: 0px;
-    margin-left:0px;
-    background-color: white;
-    height:100%;
-    width:65%;
+    width:100% ;
 }
 
-.POS-input-container{
-    position: absolute;
-    margin-top: 0px;
-    margin-left:70%;
+.report-nav button {
     background-color: white;
-    height:100%;
-    width:30%;
+    color: black;
+    width:25%;
+    height: 40px;
+    border:none;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
 }
 
+.report-nav button.active {
+    background-color: #5F4AE7;
+    color:white;
+}
+
+/*Reports Slides styling*/
+.report-slides {
+    position: relative;
+    width: 100%;
+    height: 93%;
+    margin-top: 40px;
+    overflow: hidden;
+}
+
+.report-slide {
+    position: absolute;
+    top: 0;
+    left: 100%; 
+    width: 100%;
+    height: 100%;
+}
+
+.report-slide.active {
+    left: 0; 
+}
+
+/* Container for the date picker */
+.date-picker-container {
+  display: flex;
+  align-items: center;
+  gap: 80px; 
+  padding: 30px 0px;
+  border-radius: 5px;
+}
+
+.date-label {
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+}
+
+.custom-date-picker {
+  border: 1px solid black; 
+  border-radius: 5px;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-family: Arial, sans-serif;
+  width: 230px;
+  box-shadow: none;
+  transition: border-color 0.3s ease;
+}
+
+.custom-date-picker:focus {
+  border-color: #6200ee;
+  outline: none;
+}
+
+.search-button {
+  background-color: #5F4AE7; 
+  color: #fff; 
+  border: none;
+  border-radius: 5px;
+  padding: 8px 30px;
+  font-size: 14px;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.search-button:hover {
+  background-color: #3700b3; 
+}
+
+/* Container for the month picker */
+.month-picker-container {
+  display: flex;
+  align-items: center;
+  gap: 80px; 
+  padding: 30px 0px;
+  border-radius: 5px;
+}
+
+.month-label {
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+}
+
+.custom-month-picker {
+  border: 1px solid black; 
+  border-radius: 5px;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-family: Arial, sans-serif;
+  width: 230px;
+  background-color: white;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+
+.custom-month-picker:focus {
+  border-color: #6200ee; 
+  outline: none;
+}
+
+.month-search-button {
+  background-color: #5F4AE7; 
+  color: #fff; 
+  border: none;
+  border-radius: 5px;
+  padding: 8px 30px;
+  font-size: 14px;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.month-search-button:hover {
+  background-color: #3700b3; 
+}
+
+/*Content Listing Styles*/
 .header-container{
     height: 40px;
-    width:96%;
-    top:20px;
-    margin-left: 2%;
+    width:100%;
+    margin-top:15px;
     background-color: #ADC1ED;
     position: absolute;
 }
@@ -238,363 +368,134 @@ html, body {
 }
 
 .content-container{
-    height: 85%;
-    width:96%;
-    margin-left: 2%;
-    margin-top:65px;
+    height: 50%;
+    position: absolute;
+    width:100%;
+    top:0px;
     background-color: transparent;
     position: absolute;
     overflow-y: auto;
-    scrollbar-width: none; 
     -ms-overflow-style: none; 
+    scrollbar-width: none;
 }
 
 .content-container::-webkit-scrollbar {
-    display: none; 
+    display: none;
 }
 
-.content-container .product{
+.content-container .pro-stock{
     width:100%;
     height: 40px;
     margin-top:0px;
+    border-bottom: 1px solid black;
     position: relative;
 }
 
-.pro-c{
+.pro-stock-id {
     color: black;
     font-size: 16px;
     margin-top: 10px; 
     font-family: Arial, Helvetica, sans-serif;
-    left: 5px;
+    left: 10px;
     position: absolute; 
     display: inline-block; 
 }
 
-.pro-desc {
+.pro-stock-name {
     color: black;
     font-size: 16px;
     margin-top: 10px; 
     font-family: Arial, Helvetica, sans-serif;
-    left: 40px;
+    left: 210px;
     position: absolute; 
     display: inline-block; 
 }
 
-.pro-qty{
+.pro-stock-quantity
+{
     color: black;
     font-size: 16px;
     margin-top: 10px; 
     font-family: Arial, Helvetica, sans-serif;
-    left: 355px;
+    left: 670px;
     position: absolute; 
     display: inline-block; 
 }
 
-.pro-price{
+.pro-high-revenue{
     color: black;
     font-size: 16px;
     margin-top: 10px; 
     font-family: Arial, Helvetica, sans-serif;
-    left: 405px;
+    left: 670px;
     position: absolute; 
     display: inline-block; 
 }
 
-.pro-discount{
+.pro-high-unitsold{
     color: black;
     font-size: 16px;
     margin-top: 10px; 
     font-family: Arial, Helvetica, sans-serif;
-    left: 500px;
+    left: 900px;
     position: absolute; 
     display: inline-block; 
 }
 
-.pro-total{
+.pro-stock-status{
     color: black;
     font-size: 16px;
     margin-top: 10px; 
     font-family: Arial, Helvetica, sans-serif;
-    left: 590px;
+    left: 900px;
     position: absolute; 
-    display: inline-block; 
+    display: inline-block;
+    font-weight: bold;
 }
 
-.product p, .product div {
+.pro-stock-status.in-stock {
+  color: green;
+}
+
+.pro-stock-status.out-of-stock {
+  color: red;
+}
+
+.pro-stock-status.low-stock {
+  color: orange;
+}
+
+.pro-stock p, .pro-stock div {
     padding: 0 10px; 
 }
 
-.product-entry {
-    margin-left: 5%;
-    width:90%;
-    margin-top:20px;
-    font-family: Arial, Helvetica, sans-serif;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.entry-label {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-.entry-input {
-    height: 35px;
-    border: 1px solid black;
-    border-radius: 5px;
-    font-size: 16px;
-    width: 98%;
-}
-
-.entry-button {
-    margin-top: 10px;
-    width: 50%;
-    background-color: #F1F5FE;
-    color: #5F4AE7;
-    font-size: 16px;
-    font-weight: bold;
-    border: 1px solid #5F4AE7;
-    border-radius: 5px;
-    padding: 10px;
-    cursor: pointer;
-}
-
-.price-summary {
-    margin-top:20px;
-    font-size: 16px;
-    line-height: 1.8;
-}
-
-.price-summary p {
-    display: flex;
-    justify-content: space-between;
-    margin: 0;
-}
-
-.net-label {
-    font-weight: bold;
-    font-size: 18px;
-}
-
-.net-value {
-    font-weight: bold;
-    font-size: 18px;
-}
-
-.action-button {
-    width: 100%;
-    font-size: 16px;
-    font-weight: bold;
-    border: none;
-    border-radius: 5px;
-    padding: 10px;
-    cursor: pointer;
-    transition: opacity 0.3s;
-}
-
-.print-button {
-    margin-top:40px;
-    background-color: #5F4AE7;
-    color: white;
-}
-
-.print-button:hover {
-    opacity: 0.8;
-}
-
-.clear-button {
-    background-color: #e84343;
-    color: white;
-}
-
-.clear-button:hover {
-    opacity: 0.8;
-}
-
-
-/* Modal Styling */
-.modal {
-    display: none; 
-    position: fixed; 
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.4); 
-    overflow: hidden; 
-}
-
-.modal-content {
-    background-color: white;
-    position: fixed; 
-    margin: 0 auto;
-    padding: 20px;
-    width: 30%; 
-    height: 85%;
-    top: 5%; 
-    left: 35%;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    overflow: hidden; 
-}
-
-.modal-content .modal-body {
-    height: 100%;
-    overflow-y: auto; 
-}
-
-.modal-body::-webkit-scrollbar {
-    width: 0; 
-}
-
-.modal-body {
-    scrollbar-width: none; 
-}
-
-.modal-body {
-    -ms-overflow-style: none;
-}
-
-.close-product-slider {
-    width: 30px;
-    height: 25px;
-    margin-top: -7px;
-    margin-left:88%;
+.chart-container h2{
     position: absolute;
-    cursor: pointer;
+    margin-top:20px;
+    margin-left:30px;
 }
 
-.receipt-header {
-    display: flex;
-    margin-left: 25%;
-    text-align: center;
-    margin-bottom: 20px;
+.monthly-revenue{
+    position: absolute;
+    margin-top:20px;
+    margin-left:80%;
+    font-size: 27px;
+    color:red;
 }
 
-.rec-Logo {
-    width: 40px;
-    height: 40px;
-    display:flex;
+.chart-container {
+    background-color: white; 
+    width: 100%; 
+    height: 78%; 
+    margin-top: 0px; 
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); 
+    border-radius: 10px; 
+    position: relative; 
 }
 
-.rec-logoname {
-    color: black;
-    font-size: 33px;
-    font-family: Playfair Display;
-    font-weight: 700;
-    word-wrap: break-word;
-    margin-left:20px;
+.chart-container canvas {
+    position:absolute;
+    margin-top:50px;
+    width: 80%;
+    height: 100%;
 }
-
-.bill-details {
-    margin-top: 20px;
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-    color: black;
-}
-
-.bill-detail-row {
-    display: flex;
-    margin-bottom: 15px;
-}
-
-.detail-label {
-    font-weight: bold;
-    color: black;
-}
-
-.detail-value {
-    left:100px;
-    font-weight: normal;
-    color: black;
-}
-
-.bill-summary {
-    margin-top: 10px; 
-    padding-top: 10px;
-    font-size: 14px;
-    border-top: 1px solid #ddd; 
-}
-
-.bill-summary p {
-    display: flex;
-    justify-content: space-between;
-    margin: 5px 0;
-}
-
-.bill-summary p:last-child {
-    font-size: 18px;
-    font-weight: bold;
-    color: black;
-}
-
-.billDetails-header-container {
-    margin-top:30px;
-    height: 30px;
-    width: 98%;
-    background-color: #ADC1ED;
-    display: flex; 
-    align-items: center;
-    padding: 0 5px; 
-}
-
-.bill-header-top {
-    font-size: 13px;
-    font-weight: bold;
-    font-family: Arial, Helvetica, sans-serif;
-    color: black;
-    text-align: left;
-    flex: 1; 
-}
-
-.header-id {
-    flex: 0.5;
-    text-align: center; 
-}
-
-.header-description {
-    flex: 3; 
-    text-align: left;
-    padding-left: 5px; 
-}
-
-.header-qty, .header-unit-price, .header-subtotal {
-    flex: 1; 
-    text-align: center;
-}
-
-.item {
-    display: flex;
-    align-items: center;
-    padding: 10px 0;
-}
-
-.item p {
-    flex: 1;
-    margin: 0;
-    font-size: 14px;
-    text-align: center; 
-}
-
-.item .item-id {
-    flex: 0.5;
-    text-align: center;
-}
-
-.item .item-desc {
-    flex: 3;
-    text-align: left;
-    padding-left: 5px;
-}
-
-.item .item-qty,
-.item .item-price,
-.item .item-total {
-    flex: 1;
-    text-align: center;
-}
-
-
-

@@ -9,7 +9,6 @@ html, body {
     background-color: #F1F5FE;
     overflow-x: hidden;
     font-family: Arial, Helvetica, sans-serif;
-
 }
 
 .container {
@@ -193,29 +192,75 @@ html, body {
     font-weight: bold;
 }
 
-
-/*Customer Management webpage styling start*/
 .middle-container{
     height: 82%;
     width:1105px;
     left:360px;
     top:125px;
     border-radius: 5px;
-    background-color: white;
+    background-color: transparent;
     position: absolute;
 }
 
+
+/*Stock Management Webpage Styling*/
+.stock-nav {
+    display: flex;
+    position: absolute;
+    display: flex;
+    margin-top: 0px;
+    width:100% ;
+}
+
+.stock-nav button {
+    background-color: white;
+    color: black;
+    width:25%;
+    height: 40px;
+    border:none;
+    cursor: pointer;
+    font-weight: bold;
+    font-size:16px;
+    transition: background-color 0.3s;
+}
+
+.stock-nav button.active {
+    background-color: #5F4AE7;
+    color:white;
+}
+
+.stock-slides {
+    position: relative;
+    width: 100%;
+    height: 93%;
+    margin-top: 40px;
+    overflow: hidden;
+}
+
+.stock-slide {
+    position: absolute;
+    top: 0;
+    left: 100%; 
+    width: 100%;
+    height: 100%;
+}
+
+.stock-slide.active {
+    left: 0; 
+}
+
 .add-button{
-    width:155px;
+    width:125px;
     height:35px;
-    margin-left:905px;
-    margin-top: 30px;
+    margin-left:980px;
+    margin-top: 20px;
     position: absolute;
     border:3px solid #5F4AE7;
     border-radius: 10px;
     display: flex;
     background-color: #5F4AE7;
     cursor: pointer;
+    font-size: 15px
 }
 
 .add-button p{
@@ -235,15 +280,12 @@ html, body {
     margin-left:0px;
     font-weight: bold;
     position: absolute;
-
 }
 
-/* Header */
 .header-container{
     height: 40px;
-    width:1020px;
-    margin-top:40px;
-    margin-left: 40px;
+    width:100%;
+    margin-top:80px;
     background-color: #ADC1ED;
     position: absolute;
 }
@@ -258,16 +300,22 @@ html, body {
 }
 
 .content-container{
-    height: calc(100% - 130px);
-    width:1020px;
-    margin-left: 40px;
-    margin-top:90px;
-    background-color: white;
+    height: 50%;
+    position: absolute;
+    width:100%;
+    margin-top:120px;
+    background-color: transparent;
     position: absolute;
     overflow-y: auto;
+    -ms-overflow-style: none; 
+    scrollbar-width: none;
 }
 
-.content-container .customer{
+.content-container::-webkit-scrollbar {
+    display: none;
+}
+
+.content-container .pro-stock{
     width:100%;
     height: 40px;
     margin-top:0px;
@@ -275,7 +323,7 @@ html, body {
     position: relative;
 }
 
-.cus-fname {
+.pro-stock-id {
     color: black;
     font-size: 16px;
     margin-top: 10px; 
@@ -285,27 +333,38 @@ html, body {
     display: inline-block; 
 }
 
-.cus-lname {
+.pro-stock-name {
     color: black;
     font-size: 16px;
     margin-top: 10px; 
     font-family: Arial, Helvetica, sans-serif;
-    left: 210px;
+    left: 140px;
     position: absolute; 
     display: inline-block; 
 }
 
-.cus-email{
+.pro-stock-quantity
+{
     color: black;
     font-size: 16px;
     margin-top: 10px; 
     font-family: Arial, Helvetica, sans-serif;
-    left: 410px;
+    left: 580px;
     position: absolute; 
     display: inline-block; 
 }
 
-.cus-phone{
+.pro-stock-mandate{
+    color: black;
+    font-size: 16px;
+    margin-top: 10px; 
+    font-family: Arial, Helvetica, sans-serif;
+    left: 690px;
+    position: absolute; 
+    display: inline-block; 
+}
+
+.pro-C-stock-mandate{
     color: black;
     font-size: 16px;
     margin-top: 10px; 
@@ -315,18 +374,37 @@ html, body {
     display: inline-block; 
 }
 
-.customer p, .customer div {
+.pro-stock-expirydate{
+    color: black;
+    font-size: 16px;
+    margin-top: 10px; 
+    font-family: Arial, Helvetica, sans-serif;
+    left: 870px;
+    position: absolute; 
+    display: inline-block; 
+}
+
+.pro-C-stock-expirydate{
+    color: black;
+    font-size: 16px;
+    margin-top: 10px; 
+    font-family: Arial, Helvetica, sans-serif;
+    left: 910px;
+    position: absolute; 
+    display: inline-block; 
+}
+
+.pro-stock p, .pro-stock div {
     padding: 0 10px; 
 }
 
-.cus-actions {
+.stock-actions {
     display: flex; 
     align-items: center;
-    left: 890px; 
+    left: 1010px; 
     position: absolute; 
     top: 50%; 
     transform: translateY(-50%);
-    
 }
 
 .edit {
@@ -342,8 +420,8 @@ html, body {
 }
 
 
-/*Slider to add customers*/
-.Customer-slider {
+/* Stock management webpage slider Styling*/
+.product-slider {
     position: fixed;
     top: 0;
     right: -100%;
@@ -355,18 +433,18 @@ html, body {
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
 }
 
-.Customer-slider.active {
+.product-slider.active {
     right: 0;
 }
 
-.customer-slider-container {
+.product-slider-container {
     display: flex;
     flex-direction: column;
     height: 100%;
     font-family: Arial, Helvetica, sans-serif;
 }
 
-.customer-slider-header {
+.product-slider-header {
     display: flex;
     color: white;
     justify-content: space-between;
@@ -376,14 +454,14 @@ html, body {
     flex-shrink: 0;
 }
 
-.Customer-slider-title {
+.product-slider-title {
     font-size:27px;
     font-weight: bold;
     margin-left: 32px;
     color:black;
 }
 
-.close-customer-slider {
+.close-product-slider {
     width: 51px;
     height: 42px;
     margin-top: -7px;
@@ -392,13 +470,13 @@ html, body {
     cursor: pointer;
 }
 
-.customer-slider-hline{
+.product-slider-hline{
     margin-top: 5px;
     margin-left: 0px;
     position: relative;
 } 
 
-.customer-slider-form {
+.product-slider-form {
     flex-grow: 1; 
     overflow-y: auto; 
     box-sizing: border-box;
@@ -406,7 +484,7 @@ html, body {
     margin-top:35px;
 }
 
-.cus-form-row {
+.product-form-row {
     display: flex;
     flex-direction: column; 
     align-items: flex-start; 
@@ -415,7 +493,7 @@ html, body {
     padding-left: 25px; 
 }
 
-.cus-form-label {
+.product-form-label {
     font-size: 18px;
     margin-left: 10px;
     font-weight: bold;
@@ -423,7 +501,7 @@ html, body {
     margin-bottom: 10px; 
 }
 
-.form-c-text {
+.form-product-text {
     border-radius: 5px;
     background-color: #F1F5FE;
     margin-left: 10px;
@@ -445,205 +523,25 @@ html, body {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    margin-top: 15px;
+    margin-top: 10px;
     margin-left: 36px;
     align-self: center; 
     transition: background-color 0.3s ease;
+    margin-bottom: 15px;
 }
 
 .form-save-but:hover {
     background-color: #3f2ecb; 
 }
 
-/*Customer Management webpage styling start*/
 
-/*system user Management webpage styling start*/
 
-.content-container .user{
-    width:100%;
-    height: 40px;
-    margin-top:0px;
-    border-bottom: 1px solid black;
-    position: relative;
-}
 
-.user-id {
-    color: black;
-    font-size: 16px;
-    margin-top: 10px; 
-    font-family: Arial, Helvetica, sans-serif;
-    left: 10px;
-    position: absolute; 
-    display: inline-block; 
-}
 
-.user-s-name {
-    color: black;
-    font-size: 16px;
-    margin-top: 10px; 
-    font-family: Arial, Helvetica, sans-serif;
-    left: 190px;
-    position: absolute; 
-    display: inline-block; 
-}
 
-.user-NIC{
-    color: black;
-    font-size: 16px;
-    margin-top: 10px; 
-    font-family: Arial, Helvetica, sans-serif;
-    left: 470px;
-    position: absolute; 
-    display: inline-block; 
-}
 
-.user-s-role{
-    color: black;
-    font-size: 16px;
-    margin-top: 10px; 
-    font-family: Arial, Helvetica, sans-serif;
-    left: 710px;
-    position: absolute; 
-    display: inline-block; 
-}
 
-.user p, .user div {
-    padding: 0 10px; 
-}
 
-.user-role-select select {
-    border-radius: 5px; 
-    background-color: #F1F5FE; 
-    margin-left: 10px;
-    border: 1px solid #B9CAF0; 
-    color: black;
-    width: 85%;
-    height: 35px; 
-    padding: 5px;
-    box-sizing: border-box; 
-    font-size: 16px; 
-    font-family: Arial, Helvetica, sans-serif; 
-    appearance: none; 
-}
 
-.user-role-select select:focus {
-    outline: none; 
-    border-color: #5F4AE7;
-    width: 85%;
-}
 
-.user-role-select {
-    position: relative;
-    width: 100%;
-}
 
-.user-role-select:after {
-    content: "▼"; 
-    font-size: 12px;
-    color: #B9CAF0;
-    position: absolute;
-    left: 80%;
-    top: 50%;
-    transform: translateY(-50%);
-    pointer-events: none;
-    width: 100%;
-}
-
-.button-wrapper {
-    display: flex; 
-    flex-direction: column; 
-    width: 100%; 
-    gap: 20px; 
-    margin-left: 38px;
-    margin-top: 50px;
-}
-
-.change-password-but {
-    width: 40%;
-    height: 40px;
-    border: 1px solid #5F4AE7;
-    background-color: transparent; 
-    color: #5F4AE7;
-    font-size: 16px;
-    font-weight: bold;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.form-update-but {
-    width: 40%;
-    height: 40px;
-    background-color: #5F4AE7; 
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.form-update-but:hover {
-    background-color: #3f2ecb; 
-}
-
-/* Modal Styles */
-.modal {
-    display: none; 
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); 
-    z-index: 2000; 
-    justify-content: center;
-    align-items: center;
-}
-
-.modal-content {
-    background-color: white;
-    width: 30%; 
-    position: relative;
-    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
-}
-
-.close-modal {
-    width: 51px;
-    height: 42px;
-    margin-top: -7px;
-    margin-left:85%;
-    position: absolute;
-    cursor: pointer;
-}
-
-.modal-divider {
-    margin-top: 5px;
-    margin-left: 0px;
-    position: relative;
-}
-
-.modal-body {
-    margin-top: 20px;
-}
-
-.modal-but {
-    width: 40%;
-    height: 40px;
-    background-color: #5F4AE7; 
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-left:30%;
-}
-
-.modal-but:hover {
-    background-color: #3f2ecb; 
-}
-
-/*system user Management webpage styling end*/
