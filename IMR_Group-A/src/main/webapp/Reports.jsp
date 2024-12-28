@@ -6,6 +6,9 @@
         <title>Reports</title>
         <link rel="stylesheet" href="StyleSheet6.css" />
         
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+        
     </head>
     <body>
         
@@ -271,17 +274,13 @@
                 const navButtons = document.querySelectorAll(".report-nav button");
                 const slides = document.querySelectorAll(".report-slide"); // Corrected selector
 
-                // Add click event to each navigation button
                 navButtons.forEach((button) => {
                     button.addEventListener("click", () => {
-                        // Get the target ID
                         const targetId = button.getAttribute("data-target");
 
-                        // Update the active navigation button
                         navButtons.forEach((btn) => btn.classList.remove("active"));
                         button.classList.add("active");
 
-                        // Update the active slide
                         slides.forEach((slide) => {
                             slide.classList.remove("active");
                             if (slide.id === targetId) {
@@ -293,32 +292,87 @@
             });
             
             
-            // Wait until the DOM is fully loaded
             document.addEventListener("DOMContentLoaded", () => {
-              // Select all product stock cards
               const stockCards = document.querySelectorAll(".pro-stock");
 
-              // Loop through each card and update the status color
               stockCards.forEach((card) => {
-                // Get the status from the data attribute or backend
-                const status = card.getAttribute("data-status"); // e.g., 'in-stock', 'out-of-stock', 'low-stock'
+                const status = card.getAttribute("data-status"); 
 
-                // Find the stock status element
                 const statusElement = card.querySelector(".pro-stock-status");
 
-                // Add the corresponding class based on the status
                 if (status === "in-stock") {
                   statusElement.classList.add("in-stock");
-                  statusElement.textContent = "In Stock"; // Update the text
+                  statusElement.textContent = "In Stock"; 
                 } else if (status === "out-of-stock") {
                   statusElement.classList.add("out-of-stock");
-                  statusElement.textContent = "Out of Stock"; // Update the text
+                  statusElement.textContent = "Out of Stock"; 
                 } else if (status === "low-stock") {
                   statusElement.classList.add("low-stock");
-                  statusElement.textContent = "Low Stock"; // Update the text
+                  statusElement.textContent = "Low Stock"; 
                 }
               });
             });
+            
+            
+            document.addEventListener("DOMContentLoaded", () => {
+            const monthlyRevenueChartCtx = document
+              .getElementById("monthlyRevenueChart")
+              .getContext("2d");
+
+            // Demo values for daily revenue
+            const demoDailyRevenue = [
+              10000, 12000, 8000, 15000, 14000, 18000, 20000, 17000, 15000, 22000, 24000,
+              23000, 19000, 21000, 20000, 25000, 26000, 27000, 29000, 28000, 31000, 30000,
+              32000, 35000, 34000, 33000, 31000, 30000, 29000, 31000, 32000,
+            ];
+
+            // Days of the month as labels
+            const daysOfMonth = Array.from({ length: 31 }, (_, i) => i + 1); // 1 to 31
+
+            // Create the chart
+            new Chart(monthlyRevenueChartCtx, {
+              type: "bar",
+              data: {
+                labels: daysOfMonth, // Days of the month
+                datasets: [
+                  {
+                    label: "Daily Revenue (LKR)",
+                    data: demoDailyRevenue, // Demo values for each day
+                    backgroundColor: "#0E80BF",
+                    borderColor: "#0E80BF",
+                    borderWidth: 1,
+                  },
+                ],
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                  x: {
+                    title: {
+                      display: true,
+                      text: "Days of the Month",
+                      font: { size: 14 },
+                    },
+                  },
+                  y: {
+                    beginAtZero: true,
+                    title: {
+                      display: true,
+                      text: "Revenue (LKR)",
+                      font: { size: 14 },
+                    },
+                  },
+                },
+                plugins: {
+                  legend: {
+                    position: "top",
+                  },
+                },
+              },
+            });
+          });
+
         </script>
 
     </body>
