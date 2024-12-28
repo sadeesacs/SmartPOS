@@ -9,16 +9,13 @@ import java.util.List;
 
 public class ProductDAO {
     public List<Product> getAllProducts() {
-        List<Product> productList = new ArrayList<>();
+        List<Product> products = new ArrayList<>();
         String sql = "SELECT ProductID, ProductName, ProductCategory, "
                    + "IsWeighted, PricePerUnit, PricePer100g, ProductImageURL "
-                   + "FROM Products "
-                   + "ORDER BY ProductID ASC";
-
+                   + "FROM Products ORDER BY ProductID ASC";
         try (Connection conn = dbconn.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
-
             while (rs.next()) {
                 Product p = new Product();
                 p.setProductID(rs.getInt("ProductID"));
@@ -28,17 +25,21 @@ public class ProductDAO {
                 p.setPricePerUnit(rs.getDouble("PricePerUnit"));
                 p.setPricePer100g(rs.getDouble("PricePer100g"));
                 p.setProductImageURL(rs.getString("ProductImageURL"));
-                productList.add(p);
+                products.add(p);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return productList;
+        return products;
     }
 
+    /**
+     * Calls spAddProduct to insert a new product.
+     * Returns the newly generated ProductID.
+     */
     public int addProduct(Product product) {
         int newID = -1;
-        String sql = "{CALL spAddProduct(?,?,?,?,?,?)}"; 
+        String sql = "{CALL spAddProduct(?,?,?,?,?,?)}";
         try (Connection conn = dbconn.getConnection();
              CallableStatement cstmt = conn.prepareCall(sql)) {
 
@@ -55,15 +56,18 @@ public class ProductDAO {
                 }
             }
         } catch (SQLException e) {
+            e.printStackTrace();
         }
         return newID;
     }
 
+    /**
+     * Calls spUpdateProduct to update an existing product.
+     */
     public void updateProduct(Product product) {
-        String sql = "{CALL spUpdateProduct(?,?,?,?,?,?,?)}"; 
+        String sql = "{CALL spUpdateProduct(?,?,?,?,?,?,?)}";
         try (Connection conn = dbconn.getConnection();
              CallableStatement cstmt = conn.prepareCall(sql)) {
-
             cstmt.setInt(1, product.getProductID());
             cstmt.setString(2, product.getProductName());
             cstmt.setString(3, product.getProductCategory());
@@ -71,20 +75,23 @@ public class ProductDAO {
             cstmt.setDouble(5, product.getPricePerUnit());
             cstmt.setDouble(6, product.getPricePer100g());
             cstmt.setString(7, product.getProductImageURL());
-
             cstmt.execute();
         } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
-    
+
+    /**
+     * Calls spDeleteProduct to delete a product by ProductID.
+     */
     public void deleteProduct(int productID) {
         String sql = "{CALL spDeleteProduct(?)}";
         try (Connection conn = dbconn.getConnection();
              CallableStatement cstmt = conn.prepareCall(sql)) {
-
             cstmt.setInt(1, productID);
             cstmt.execute();
         } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }

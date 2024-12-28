@@ -161,15 +161,13 @@
                                 <div class="edit" onclick="showEditSlider('<%= st.getStockID() %>','<%= st.getProductName() %>','<%= st.getQuantity() %>','<%= st.getManufactureDate() %>','<%= st.getExpiryDate() %>')">
                                     <i class="bi bi-pencil-fill"></i>
                                 </div>
-                                <div class="delete">
-                                    <form method="post" action="StockServlet" style="display:inline;">
-                                        <input type="hidden" name="action" value="delete"/>
-                                        <input type="hidden" name="stockID" value="<%= st.getStockID() %>"/>
-                                        <button class="delete" type="submit" onclick="return confirm('Delete this stock?');">
-                                            <i class="bi bi-trash3-fill"></i>
-                                        </button>
-                                    </form>
-                                </div>
+                                <form method="post" action="StockServlet" style="display:inline;">
+                                    <input type="hidden" name="action" value="delete"/>
+                                    <input type="hidden" name="stockID" value="<%= st.getStockID() %>"/>
+                                    <button class="delete" type="submit" onclick="return confirm('Delete this stock?');">
+                                        <i class="bi bi-trash3-fill"></i>
+                                    </button>
+                                </form>
                                 <%
                                     }
                                 %>
