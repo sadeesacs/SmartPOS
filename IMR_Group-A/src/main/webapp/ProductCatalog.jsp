@@ -1,35 +1,35 @@
 <%@ page import="java.util.List" %>
 <%@ page import="Model.Product" %>
-<%@ page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Product Catalog</title>
         <link rel="stylesheet" href="StyleSheet5.css" />
     </head>
     <body>
-        <!-- Navigational Panel of the Smart POS System -->
+
+        <!-- Navigation Panel -->
         <div class="navigation">
-            <div class="Logo"><img src="images/icons/logo.png" /></div>
+            <div class="Logo"><img src="images/icons/logo.png"/></div>
             <div class="logoname"><a href="Dashboard.jsp">Smart <span style="color:#5F4AE7">POS</span></a></div>
-        
+
             <ul class="nav-menu">
                 <a href="">
                     <li class="nav-item">
-                        <img src="images/icons/Dashboard-B.png"></img>
+                        <img src="images/icons/Dashboard-B.png"/>
                         <span>Dashboard</span>
                     </li>
                 </a>
                 <a href="">
                     <li class="nav-item">
-                        <img src="images/icons/POS-B.png"></img>
+                        <img src="images/icons/POS-B.png"/>
                         <span>POS</span>
                     </li>
                 </a>
                 <a href="">
                     <li class="nav-item active">
-                        <img src="images/icons/Products-W.png"></img>
+                        <img src="images/icons/Products-W.png"/>
                         <span>Products</span>
                     </li>
                 </a>
@@ -70,25 +70,26 @@
                     </li>
                 </a>
             </ul>
-            
+
+            <!-- Logout form -->
             <form action="ProductCatalogServlet" method="post" style="display:inline;">
-                <input type="hidden" name="action" value="logout" />
+                <input type="hidden" name="action" value="logout"/>
                 <button class="logout" type="submit">
                     <img src="images/icons/Logout.png"/>
                     <span>Logout</span>
                 </button>
             </form>
         </div>
-        
-        <!--Notification Icon of the header-->
+
+        <!-- Notification Icon -->
         <div class="notfication-icon">
             <img src="images/icons/notify-icon.png">
         </div>
-        
-        <!--User Profile View of the header-->
+
+        <!-- User Profile -->
         <div class="user-profile">
             <div class="user-avatar">
-              <img src="images/icons/usericon.png">
+                <img src="images/icons/usericon.png">
             </div>
             <div class="user-info">
               <%
@@ -102,15 +103,14 @@
             </div>
         </div>
 
-        <!--Main Header-->
+        <!-- Main Header -->
         <div class="main-header">
             Product Catalog
         </div>
 
-        <!--Middle Container for content-->
+        <!-- Middle Container -->
         <div class="middle-container">
             <nav class="product-nav">
-                <!-- Original category nav buttons -->
                 <button data-target="Vegetables" class="active">Vegetables</button>
                 <button data-target="Fruits">Fruits</button>
                 <button data-target="Meat">Meat</button>
@@ -122,29 +122,21 @@
 
             <div class="product-slides">
                 <%
-                    String[] categories = {
-                        "Vegetables", 
-                        "Fruits", 
-                        "Meat", 
-                        "HouseHold", 
-                        "Grocery", 
-                        "Bakery", 
-                        "Beverages"
-                    };
-
                     List<Product> productList = (List<Product>) request.getAttribute("productList");
                     if (productList == null) {
                         productList = java.util.Collections.emptyList();
                     }
-
-                    boolean firstCategory = true;
+                    // define categories
+                    String[] categories = {"Vegetables","Fruits","Meat","HouseHold","Grocery","Bakery","Beverages"};
+                    boolean first = true;
                     for (String cat : categories) {
                 %>
-                <div id="<%= cat %>" class="product-slide <%= (firstCategory ? "active" : "") %>">
+                <div id="<%= cat %>" class="product-slide <%= first ? "active" : "" %>">
                     <div class="product-cards-container">
                         <%
                             for (Product p : productList) {
                                 if (cat.equalsIgnoreCase(p.getProductCategory())) {
+                                    // figure out the correct price
                                     double priceVal = p.isWeighted() ? p.getPricePer100g() : p.getPricePerUnit();
                         %>
                         <div class="product-card">
@@ -155,22 +147,23 @@
                                     <%
                                         if (!"Cashier".equalsIgnoreCase(currentRole)) {
                                     %>
-                                    <button class="edit-button" 
+                                    <button class="edit-button"
                                             onclick="showEditSlider(
-                                               '<%= p.getProductID() %>',
-                                               '<%= p.getProductName() %>',
-                                               '<%= p.isWeighted() ? "100g" : "1" %>',
-                                               '<%= priceVal %>',
-                                               '<%= p.getProductCategory() %>',
-                                               '<%= p.getProductImageURL() %>')"
+                                                '<%= p.getProductID() %>',
+                                                '<%= p.getProductName() %>',
+                                                '<%= p.isWeighted() ? "100g" : "1" %>',
+                                                '<%= priceVal %>',
+                                                '<%= p.getProductCategory() %>',
+                                                '<%= p.getProductImageURL() %>')"
                                             title="Edit">
                                         <i class="bi bi-pencil-fill"></i>
                                     </button>
+
                                     <!-- Delete form -->
                                     <form method="post" action="ProductCatalogServlet" style="display:inline;">
-                                        <input type="hidden" name="action" value="delete" />
-                                        <input type="hidden" name="productID" value="<%= p.getProductID() %>" />
-                                        <button class="delete-button" type="submit" title="Delete" onclick="return confirm('Delete this product?');">
+                                        <input type="hidden" name="action" value="delete"/>
+                                        <input type="hidden" name="productID" value="<%= p.getProductID() %>"/>
+                                        <button class="delete-button" type="submit" onclick="return confirm('Delete this product?');">
                                             <i class="bi bi-trash3-fill"></i>
                                         </button>
                                     </form>
@@ -185,7 +178,7 @@
                                 <%
                                     if (p.isWeighted()) {
                                 %>
-                                    <p class="product-weight">100g</p>
+                                <p class="product-weight">100g</p>
                                 <%
                                     }
                                 %>
@@ -193,65 +186,66 @@
                         </div>
                         <%
                                 }
-                            } 
+                            }
                         %>
-                    </div> >
-                </div> 
+                    </div>
+                </div>
                 <%
-                        firstCategory = false;
-                    } 
+                        first = false;
+                    }
                 %>
-            </div> 
-        </div>
-        
+            </div> <!-- product-slides -->
+        </div> <!-- middle-container -->
+
+        <!-- If Manager/Admin, show Add button -->
         <%
             if (!"Cashier".equalsIgnoreCase(currentRole)) {
         %>
-        <button class="add-button" style="font-size: 15px" onclick="showSlider()">
+        <button class="add-button" style="font-size:15px" onclick="showSlider()">
             <div>+</div>
             <p>Add Product</p>
         </button>
         <%
             }
         %>
-        
-        <!--Edit Item Slider-->
+
+        <!-- EDIT Product Slider -->
         <div class="product-slider" id="editproductSlider">
             <div class="product-slider-container">
                 <div class="product-slider-header">
                     <div class="product-slider-title">Edit Product Details</div>
-                    <img class="close-product-slider" src="images/icons/Cancelslide.png" onclick="hideEditSlider()" />
+                    <img class="close-product-slider" src="images/icons/Cancelslide.png" onclick="hideEditSlider()"/>
                     <div class="product-slider-hline">
-                        <hr size="2" color="#5F4AE7" />
+                        <hr size="2" color="#5F4AE7"/>
                     </div>
                 </div>
-
                 <div class="product-slider-form">
                     <form method="post" action="ProductCatalogServlet" enctype="multipart/form-data">
-                        <input type="hidden" name="action" value="update" />
-                        <input type="hidden" name="productID" id="edit-productID" />
+                        <input type="hidden" name="action" value="update"/>
+                        <input type="hidden" name="productID" id="edit-productID"/>
 
                         <div class="product-form">
                             <div class="product-form-row">
                                 <label class="product-form-label">Product Name</label>
-                                <input class="form-product-text" type="text" name="customer-fname" id="edit-name" />
+                                <input class="form-product-text" type="text" name="customer-fname" id="edit-name"/>
                             </div>
                             <div class="product-form-row">
                                 <label class="product-form-label">Unit Quantity</label>
-                                <input class="form-product-text" type="text" name="customer-lname" id="edit-quantity" readonly />
+                                <!-- read-only or not? We'll let them re-specify "1" or "100g" -->
+                                <input class="form-product-text" type="text" name="customer-lname" id="edit-quantity"/>
                             </div>
                             <div class="product-form-row">
-                                <label class="product-form-label">Unit Price</label>
-                                <input class="form-product-text" type="text" name="phone-no" id="edit-price" />
+                                <label class="product-form-label">Price</label>
+                                <input class="form-product-text" type="text" name="phone-no" id="edit-price"/>
                             </div>
                             <div class="product-form-row">
-                                <label class="product-form-label">Product Category</label>
+                                <label class="product-form-label">Category</label>
                                 <div class="product-role-select">
                                     <select name="productCategory" id="edit-category">
                                         <option>Vegetables</option>
                                         <option>Fruits</option>
-                                        <option>HouseHold</option>
                                         <option>Meat</option>
+                                        <option>HouseHold</option>
                                         <option>Grocery</option>
                                         <option>Bakery</option>
                                         <option>Beverages</option>
@@ -262,45 +256,44 @@
                                 <label class="product-form-label">Product Image</label>
                                 <div class="image-select-banner">
                                     <label class="file-upload-banner">
-                                        <img id="edit-image-preview" src="images/products/carrot.png" class="img-preview-banner" />
-                                        <input type="file" name="productImageInput" accept=".jpeg, .webp, .png" style="display: none;" />
+                                        <img id="edit-image-preview" src="images/products/carrot.png" class="img-preview-banner"/>
+                                        <input type="file" name="productImageInput" accept=".jpeg,.png,.webp" style="display:none;"/>
                                     </label>
                                 </div>
                             </div>
                             <button class="form-save-but" type="submit" onclick="hideEditSlider()">Update</button>
                         </div>
                     </form>
-                </div>  
+                </div>
             </div>
         </div>
-        
-        <!--ADD Item Slider-->
+
+        <!-- ADD Product Slider -->
         <div class="product-slider" id="addproductSlider">
             <div class="product-slider-container">
                 <div class="product-slider-header">
                     <div class="product-slider-title">Add New Product</div>
-                    <img class="close-product-slider" src="images/icons/Cancelslide.png" onclick="hideSlider()" />
+                    <img class="close-product-slider" src="images/icons/Cancelslide.png" onclick="hideSlider()"/>
                     <div class="product-slider-hline">
-                        <hr size="2" color="#5F4AE7" />
+                        <hr size="2" color="#5F4AE7"/>
                     </div>
                 </div>
-
                 <div class="product-slider-form">
                     <form method="post" action="ProductCatalogServlet" enctype="multipart/form-data">
-                        <input type="hidden" name="action" value="add" />
+                        <input type="hidden" name="action" value="add"/>
 
                         <div class="product-form">
                             <div class="product-form-row">
                                 <label class="product-form-label">Product Name</label>
-                                <input class="form-product-text" type="text" name="customer-fname" required />
+                                <input class="form-product-text" type="text" name="customer-fname" required/>
                             </div>
                             <div class="product-form-row">
                                 <label class="product-form-label">Unit Quantity</label>
-                                <input class="form-product-text" type="text" name="customer-lname" placeholder="1 or 100g" required />
+                                <input class="form-product-text" type="text" name="customer-lname" placeholder="1 or 100g" required/>
                             </div>
                             <div class="product-form-row">
-                                <label class="product-form-label">Unit Price</label>
-                                <input class="form-product-text" type="text" name="phone-no" required />
+                                <label class="product-form-label">Price</label>
+                                <input class="form-product-text" type="text" name="phone-no" required/>
                             </div>
                             <div class="product-form-row">
                                 <label class="product-form-label">Product Category</label>
@@ -308,8 +301,8 @@
                                     <select name="productCategory" required>
                                         <option>Vegetables</option>
                                         <option>Fruits</option>
-                                        <option>HouseHold</option>
                                         <option>Meat</option>
+                                        <option>HouseHold</option>
                                         <option>Grocery</option>
                                         <option>Bakery</option>
                                         <option>Beverages</option>
@@ -320,8 +313,8 @@
                                 <label class="product-form-label">Product Image</label>
                                 <div class="custom-image-upload">
                                     <label class="custom-upload-container">
-                                        <img src="images/icons/Uploadimg.png" class="custom-preview-image" id="imagePreview" />
-                                        <input type="file" name="productImageInput" accept=".jpeg, .webp, .png" onchange="previewImage(event)" />
+                                        <img src="images/icons/Uploadimg.png" class="custom-preview-image" id="imagePreview"/>
+                                        <input type="file" name="productImageInput" accept=".jpeg,.png,.webp" onchange="previewImage(event)"/>
                                         <span id="dragLabel">Drag your images here</span>
                                     </label>
                                 </div>
@@ -329,11 +322,12 @@
                             <button class="form-save-but" type="submit" onclick="hideSlider()">Save</button>
                         </div>
                     </form>
-                </div>  
+                </div>
             </div>
         </div>
-        
+
         <script>
+            // Tab switching
             document.addEventListener("DOMContentLoaded", () => {
                 const navButtons = document.querySelectorAll(".product-nav button");
                 const slides = document.querySelectorAll(".product-slide");
@@ -352,7 +346,7 @@
                     });
                 });
             });
-            
+
             function showSlider() {
                 document.getElementById('addproductSlider').classList.add('active');
             }
@@ -361,20 +355,21 @@
             }
 
             function showEditSlider(productID, productName, quantityStr, priceVal, category, imageURL) {
-                // Fill hidden + visible fields
                 document.getElementById('edit-productID').value = productID;
                 document.getElementById('edit-name').value = productName;
                 document.getElementById('edit-quantity').value = quantityStr;
                 document.getElementById('edit-price').value = priceVal;
                 document.getElementById('edit-category').value = category;
-                document.getElementById('edit-image-preview').src = imageURL;
-
+                let editPreview = document.getElementById('edit-image-preview');
+                if (editPreview) {
+                    editPreview.src = imageURL;
+                }
                 document.getElementById('editproductSlider').classList.add('active');
             }
             function hideEditSlider() {
                 document.getElementById('editproductSlider').classList.remove('active');
             }
-            
+
             function previewImage(event) {
                 const input = event.target;
                 const preview = document.getElementById('imagePreview');
@@ -382,8 +377,8 @@
 
                 if (input.files && input.files[0]) {
                     const reader = new FileReader();
-                    reader.onload = function (e) {
-                        preview.src = e.target.result; 
+                    reader.onload = function(e) {
+                        preview.src = e.target.result;
                         uploadContainer.classList.add('image-selected');
                     };
                     reader.readAsDataURL(input.files[0]);

@@ -3,6 +3,7 @@ package Controller;
 import DAO.ProductDAO;
 import DAO.UserDAO;
 import Model.Product;
+import Model.User;
 
 import jakarta.servlet.annotation.MultipartConfig;
 import java.io.File;
@@ -32,20 +33,21 @@ public class ProductCatalogServlet extends HttpServlet {
         }
 
         int currentUserID = (int) session.getAttribute("userID");
+        // get role from DB
         String currentRole = userDAO.getUserRoleByID(currentUserID);
 
-        String fullName = "Unknown User";
-        Model.User currentUser = userDAO.getUserByID(currentUserID);
-        if (currentUser != null) {
-            fullName = currentUser.getFullName();
-        }
+        // If you also want the fullName
+        User currentUser = userDAO.getUserByID(currentUserID);
+        String fullName = (currentUser != null) ? currentUser.getFullName() : "UnknownUser";
 
+        // Retrieve products
         List<Product> productList = productDAO.getAllProducts();
 
+        request.setAttribute("productList", productList);
         request.setAttribute("currentRole", currentRole);
         request.setAttribute("fullname", fullName);
-        request.setAttribute("productList", productList);
 
+        // Forward to JSP
         request.getRequestDispatcher("ProductCatalog.jsp").forward(request, response);
     }
 
@@ -62,6 +64,7 @@ public class ProductCatalogServlet extends HttpServlet {
         int currentUserID = (int) session.getAttribute("userID");
         String currentRole = userDAO.getUserRoleByID(currentUserID);
 
+        // read action
         String action = request.getParameter("action");
         if ("logout".equalsIgnoreCase(action)) {
             session.invalidate();
@@ -69,7 +72,10 @@ public class ProductCatalogServlet extends HttpServlet {
             return;
         }
 
+        // If user is Cashier => hide add/edit/delete in JSP. 
+        // But if they somehow post, we can also do a safety check:
         if ("Cashier".equalsIgnoreCase(currentRole)) {
+            // do not allow add/edit/delete, just redirect
             response.sendRedirect("ProductCatalogServlet");
             return;
         }
@@ -88,19 +94,32 @@ public class ProductCatalogServlet extends HttpServlet {
             }
         }
 
+        // refresh
         response.sendRedirect("ProductCatalogServlet");
     }
     
     private void handleAddProduct(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        // product name
         String productName = request.getParameter("customer-fname");
-        String quantityStr = request.getParameter("customer-lname"); // "1" or "100g"
-        String priceStr    = request.getParameter("phone-no");
-        String category    = request.getParameter("productCategory");
+        // "1" or "100g"
+        String unitQuantity = request.getParameter("customer-lname");
+        // price
+        String priceStr     = request.getParameter("phone-no");
+        // category
+        String category     = request.getParameter("productCategory");
 
-        boolean isWeighted = "100g".equalsIgnoreCase(quantityStr);
-        double priceVal = (priceStr != null && !priceStr.isEmpty()) ? Double.parseDouble(priceStr) : 0.0;
+        // isWeighted logic
+        boolean isWeighted = false;
+        if ("100g".equalsIgnoreCase(unitQuantity)) {
+            isWeighted = true;
+        }
+
+        double priceVal = 0.0;
+        if (priceStr != null && !priceStr.isEmpty()) {
+            priceVal = Double.parseDouble(priceStr);
+        }
 
         double pricePerUnit  = 0.0;
         double pricePer100g  = 0.0;
@@ -110,8 +129,9 @@ public class ProductCatalogServlet extends HttpServlet {
             pricePerUnit = priceVal;
         }
 
+        // handle image
         Part filePart = request.getPart("productImageInput");
-        String imagePath = saveUploadedFile(filePart, request);
+        String imagePath = saveImageFile(filePart, request);
 
         Product product = new Product();
         product.setProductName(productName);
@@ -129,21 +149,11 @@ public class ProductCatalogServlet extends HttpServlet {
 
         int productID = Integer.parseInt(request.getParameter("productID"));
         String productName = request.getParameter("customer-fname");
-        String quantityStr = request.getParameter("customer-lname"); // "1" or "100g"
-        String priceStr = request.getParameter("phone-no");
-        String category = request.getParameter("productCategory");
+        String unitQuantity = request.getParameter("customer-lname"); // "1" or "100g"
+        String priceStr     = request.getParameter("phone-no");
+        String category     = request.getParameter("productCategory");
 
-        boolean isWeighted = "100g".equalsIgnoreCase(quantityStr);
-        double priceVal = (priceStr != null && !priceStr.isEmpty()) ? Double.parseDouble(priceStr) : 0.0;
-
-        double pricePerUnit = 0.0;
-        double pricePer100g = 0.0;
-        if (isWeighted) {
-            pricePer100g = priceVal;
-        } else {
-            pricePerUnit = priceVal;
-        }
-
+        // find old product to keep the old image if none was uploaded
         Product oldProduct = null;
         for (Product p : productDAO.getAllProducts()) {
             if (p.getProductID() == productID) {
@@ -152,16 +162,34 @@ public class ProductCatalogServlet extends HttpServlet {
             }
         }
 
-        Part filePart = request.getPart("productImageInput");
-        String newImagePath = saveUploadedFile(filePart, request);
+        boolean isWeighted = false;
+        if ("100g".equalsIgnoreCase(unitQuantity)) {
+            isWeighted = true;
+        }
 
-        String finalImagePath;
-        if (newImagePath != null) {
-            finalImagePath = newImagePath;
-        } else if (oldProduct != null) {
-            finalImagePath = oldProduct.getProductImageURL();
+        double priceVal = 0.0;
+        if (priceStr != null && !priceStr.isEmpty()) {
+            priceVal = Double.parseDouble(priceStr);
+        }
+        double pricePerUnit  = 0.0;
+        double pricePer100g  = 0.0;
+        if (isWeighted) {
+            pricePer100g = priceVal;
         } else {
-            finalImagePath = "images/products/default.png";
+            pricePerUnit = priceVal;
+        }
+
+        Part filePart = request.getPart("productImageInput");
+        String newImagePath = saveImageFile(filePart, request);
+
+        // if no new image => keep old
+        String finalImageURL;
+        if (newImagePath != null) {
+            finalImageURL = newImagePath;
+        } else if (oldProduct != null) {
+            finalImageURL = oldProduct.getProductImageURL();
+        } else {
+            finalImageURL = "images/products/default.png";
         }
 
         Product product = new Product();
@@ -171,27 +199,41 @@ public class ProductCatalogServlet extends HttpServlet {
         product.setWeighted(isWeighted);
         product.setPricePerUnit(pricePerUnit);
         product.setPricePer100g(pricePer100g);
-        product.setProductImageURL(finalImagePath);
+        product.setProductImageURL(finalImageURL);
 
         productDAO.updateProduct(product);
     }
 
     private void handleDeleteProduct(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         int productID = Integer.parseInt(request.getParameter("productID"));
         productDAO.deleteProduct(productID);
     }
 
-    private String saveUploadedFile(Part filePart, HttpServletRequest request) throws IOException {
+    /**
+     * Writes uploaded file to images/products folder, returns path or null if no file
+     */
+    private String saveImageFile(Part filePart, HttpServletRequest request) throws IOException {
         if (filePart == null || filePart.getSize() == 0) {
             return null;
         }
-        String fileName = getFileName(filePart);
+        // get file name
+        String contentDisp = filePart.getHeader("content-disposition");
+        String fileName = null;
+        if (contentDisp != null) {
+            for (String token : contentDisp.split(";")) {
+                token = token.trim();
+                if (token.startsWith("filename")) {
+                    fileName = token.substring(token.indexOf('=') + 1).replace("\"", "");
+                }
+            }
+        }
         if (fileName == null || fileName.trim().isEmpty()) {
             return null;
         }
 
+        // path to images/products
         String appPath = request.getServletContext().getRealPath("");
         File saveDir = new File(appPath, "images/products");
         if (!saveDir.exists()) {
@@ -202,18 +244,5 @@ public class ProductCatalogServlet extends HttpServlet {
         filePart.write(fileToSave.getAbsolutePath());
 
         return "images/products/" + fileName;
-    }
-
-    private String getFileName(Part part) {
-        String contentDisp = part.getHeader("content-disposition");
-        if (contentDisp != null) {
-            for (String token : contentDisp.split(";")) {
-                token = token.trim();
-                if (token.startsWith("filename")) {
-                    return token.substring(token.indexOf('=') + 1).replace("\"", "");
-                }
-            }
-        }
-        return null;
     }
 }
