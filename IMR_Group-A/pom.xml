@@ -18,13 +18,28 @@
             <artifactId>jakarta.jakartaee-api</artifactId>
             <version>${jakartaee}</version>
             <scope>provided</scope>
-        </dependency>
+           </dependency>
+           
+           <!-- https://mvnrepository.com/artifact/com.microsoft.sqlserver/mssql-jdbc -->
+<dependency>
+    <groupId>com.microsoft.sqlserver</groupId>
+    <artifactId>mssql-jdbc</artifactId>
+    <version>12.9.0.jre11-preview</version>
+</dependency>
 
-        <dependency>
+
+        <!--<dependency>
             <groupId>com.microsoft.sqlserver</groupId>
             <artifactId>mssql-jdbc</artifactId>
-            <version>10.2.0.jre17</version> <!-- Use a version compatible with your JDK -->
-        </dependency>
+            <version>10.2.0.jre17</version>  Use a version compatible with your JDK
+        </dependency>-->
+        
+        <dependency>
+    <groupId>javax.servlet.jsp.jstl</groupId>
+    <artifactId>javax.servlet.jsp.jstl-api</artifactId>
+    <version>1.2.1</version>
+</dependency>
+
     </dependencies>
     
     <build>
