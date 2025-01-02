@@ -33,10 +33,6 @@ public class ProductDAO {
         return products;
     }
 
-    /**
-     * Calls spAddProduct to insert a new product.
-     * Returns the newly generated ProductID.
-     */
     public int addProduct(Product product) {
         int newID = -1;
         String sql = "{CALL spAddProduct(?,?,?,?,?,?)}";
@@ -61,9 +57,7 @@ public class ProductDAO {
         return newID;
     }
 
-    /**
-     * Calls spUpdateProduct to update an existing product.
-     */
+   
     public void updateProduct(Product product) {
         String sql = "{CALL spUpdateProduct(?,?,?,?,?,?,?)}";
         try (Connection conn = dbconn.getConnection();
@@ -81,9 +75,7 @@ public class ProductDAO {
         }
     }
 
-    /**
-     * Calls spDeleteProduct to delete a product by ProductID.
-     */
+   
     public void deleteProduct(int productID) {
         String sql = "{CALL spDeleteProduct(?)}";
         try (Connection conn = dbconn.getConnection();
