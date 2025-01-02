@@ -1,0 +1,308 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Roboto+Serif:ital,opsz,wght@0,8..144,100..900;1,8..144,100..900&display=swap');
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #F1F5FE;
+    overflow-x: hidden;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.header, .footer {
+    flex-shrink: 0;
+}
+
+
+/* navigation panel of Smart POS Dshboard*/
+.navigation {
+    height: 100%;
+    background-color: white;
+    width: 300px;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25)
+}
+
+.Logo {
+    width: 40px;
+    height: 40px;
+    left:40px;
+    top: 8px;
+    position: absolute;
+    display:flex;
+}
+
+.logoname {
+    color: black;
+    font-size: 33px;
+    font-family: Playfair Display;
+    font-weight: 700;
+    word-wrap: break-word;
+    left: 95px;
+    top: 7px;
+    position: absolute;
+}
+
+.logoname a {
+    text-decoration: none; 
+    color: inherit;
+    cursor: pointer;
+}
+
+.nav-menu {
+    list-style-type: none;
+    padding: 0px 0;
+    width:80%;
+    margin-left: 10%;
+    margin-top:80px;
+}
+
+.nav-menu a {
+    text-decoration: none; 
+    color: inherit;
+    cursor: pointer;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    color: black;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-bottom: 15px;
+}
+
+.nav-item span{
+    font-size: 18px;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    color:black;
+}
+
+.nav-item img {
+    font-size: 20px;
+    margin-right: 50px;
+}
+
+.nav-item.active {
+    background-color: #5F4AE7;
+    color: white;
+    font-weight: bold;
+    border-radius: 10px;
+}
+
+.nav-item.active span{
+    color: white;
+}
+
+.logout {
+    padding: 10px;
+    display: flex;
+    cursor: pointer;
+    position: absolute;
+    margin-top: 640px;
+    margin-left:40px;
+    background-color:#F3F7FF;
+    border:none;
+    height:45px;
+    border-radius: 10px;
+    width:200px;
+}
+
+.logout img {
+    font-size: 18px;
+    margin-right: 15px;
+}
+
+.logout span {
+    font-size: 18px;
+    color:black;
+    margin-left: 35px;
+    margin-top:5px;
+    font-weight: bold;
+}
+
+/*Notification icon*/
+.notfication-icon{
+    position: absolute;
+    left: 81%;
+    top:20px;
+    color: #6c63ff; 
+    width:30px;
+    height:35px;
+    cursor: pointer;
+}
+
+/* user profile view Container styling */
+.user-profile {
+    position: absolute;
+    left: 85%;
+    top:15px;
+    display: flex;
+    border: 2px solid #5F4AE7; 
+    border-radius: 50px;
+    background-color: #ffffff;
+    font-family: Arial, sans-serif;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    gap: 10px;
+    width:165px;
+    height:40px;
+}
+
+.user-avatar {
+    margin-left:10px;
+    margin-top:1px;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    margin-top:5px;
+}
+
+.user-name {
+    font-weight: bold;
+    color: #000;
+}
+
+.user-role {
+    font-size: 12px;
+    color: #808080; 
+}
+
+.main-header{
+    position: absolute;
+    top:50px;
+    left: 360px;
+    font-size:35px;
+    color:black;
+    font-weight: bold;
+}
+
+.middle-container{
+    height: 82%;
+    width:1105px;
+    left:360px;
+    top:125px;
+    border-radius: 5px;
+    background-color: transparent;
+    position: absolute;
+}
+
+.stats-container {
+    width:100%;
+    display: flex;
+    gap: 4%;
+    justify-content: space-between;
+}
+
+.stat-card {
+    width: 22%;
+    height: 135px;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.stat-icon {
+    position: absolute;
+    top: 10px;
+    left: 15px;
+}
+
+.stat-icon img {
+    width: 25px;
+    height: 25px;
+}
+
+.stat-card p {
+    position: absolute;
+    top: -5px;
+    left: 50px;
+    font-size: 20px;
+    color: black;
+}
+
+.stat-card h3 {
+    position: absolute;
+    top: 80px;
+    left: 15px;
+    font-size: 30px;
+    margin: 0;
+}
+
+.stat-card span {
+    position: absolute;
+    top: 88px;
+    left: 160px;
+    font-size: 16px;
+    color: #808080;
+    margin-top: 5px;
+}
+
+.charts-container {
+    height:65%;
+    width:100%;
+    margin-top:40px;
+    display: flex;
+}
+
+.chart-card-1 {
+    position:absolute;
+    height:65%;
+    width:55%;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.chart-card-2 {
+    box-sizing: border-box; 
+    height:100%;
+    margin-left:60%;
+    width:40%;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.chart-card-1 canvas {
+    margin-left:30px;
+    max-width: 90%;
+    height: auto;
+}
+        
+.chart-card-2 canvas {
+    margin-left:30px;
+    margin-top:-95px;
+    max-width: 100%;
+    height:auto;
+}
+        
+.chart-card-1 h3{
+    margin-left:30px;
+}
+
+.chart-card-2 h3{
+    margin-left:30px;
+}
+
+

@@ -113,7 +113,7 @@ html, body {
     display: flex;
     cursor: pointer;
     position: absolute;
-    margin-top: 640px;
+    top: 90%;
     margin-left:40px;
     background-color:#F3F7FF;
     border:none;
@@ -438,6 +438,21 @@ html, body {
     left: 35%;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     overflow: hidden; 
+}
+
+.delete-button {
+    background-color: transparent;
+    color: red;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    position: absolute;
+    top: 8px;
+    right: -6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
 }
 
 .modal-content .modal-body {
