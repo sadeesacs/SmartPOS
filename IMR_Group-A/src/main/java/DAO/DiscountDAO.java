@@ -1,82 +1,92 @@
 package DAO;
-import Model.Discount;
+
+import DB.dbconn;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class DiscountDAO {
-    private Connection connection;
+    public int addDiscount(int productID, double discountPct, java.sql.Date startDate) throws SQLException {
+        int newID = -1;
+        String sql = "{CALL spAddDiscount(?,?,?)}";
+        try (Connection conn = dbconn.getConnection();
+             CallableStatement cstmt = conn.prepareCall(sql)) {
 
-    // Constructor to establish a database connection
-    public DiscountDAO() {
-        try {
-            // Load the JDBC driver
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver"); 
-            
-            // Replace with your actual database credentials
-            String url = "jdbc:sqlserver://localhost:1433;databaseName=POSSystemDB2;encrypt=false";
-            String user = "root";
-            String password = "root";
-            connection = DriverManager.getConnection(url, user, password); 
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
+            cstmt.setInt(1, productID);
+            cstmt.setDouble(2, discountPct);
+            if (startDate != null) {
+                cstmt.setDate(3, startDate);
+            } else {
+                cstmt.setNull(3, java.sql.Types.DATE);
+            }
+
+            try (ResultSet rs = cstmt.executeQuery()) {
+                if (rs.next()) {
+                    newID = rs.getInt("NewDiscountID");
+                }
+            }
+        }
+        return newID;
+    }
+
+    public void deleteDiscount(int productID) throws SQLException {
+        String sql = "{CALL spDeleteDiscount(?)}";
+        try (Connection conn = dbconn.getConnection();
+             CallableStatement cstmt = conn.prepareCall(sql)) {
+            cstmt.setInt(1, productID);
+            cstmt.execute();
         }
     }
 
-    // Method to add a new discount
-    public void addDiscount(Discount discount) throws SQLException {
-        if (discount.getProductId() == 0 || discount.getDiscountPercentage() <= 0) {
-            throw new SQLException("Product ID and Discount Percentage cannot be null or zero.");
-        }
+    public List<DiscountViewItem> getAllDiscounts() {
+        List<DiscountViewItem> list = new ArrayList<>();
+        String sql = "SELECT ProductID, ProductName, IsWeighted, Price, DiscountPercentage, StartDate "
+                   + "FROM vwDiscountedProducts "
+                   + "ORDER BY ProductID ASC";
+        try (Connection conn = dbconn.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
 
-        String sql = "INSERT INTO Discounts (ProductID, DiscountPercentage, StartDate) VALUES (?, ?, ?)";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, discount.getProductId());
-            statement.setDouble(2, discount.getDiscountPercentage());
-            statement.setDate(3, new java.sql.Date(System.currentTimeMillis()));
-            statement.executeUpdate();
-        }
-    }
-
-    // Method to get all discounts
-    public List<Discount> getAllDiscounts() {
-        List<Discount> discounts = new ArrayList<>();
-        try {
-            String sql = "SELECT * FROM Discounts";
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
-            while (resultSet.next()) {
-                Discount discount = new Discount();
-                discount.setDiscountId(resultSet.getInt("DiscountID"));
-                discount.setProductId(resultSet.getInt("ProductID"));
-                discount.setDiscountPercentage(resultSet.getDouble("DiscountPercentage"));
-                discount.setStartDate(resultSet.getDate("StartDate"));
-                discounts.add(discount);
+            while (rs.next()) {
+                DiscountViewItem di = new DiscountViewItem();
+                di.setProductID(rs.getInt("ProductID"));
+                di.setProductName(rs.getString("ProductName"));
+                di.setIsWeighted(rs.getBoolean("IsWeighted"));
+                di.setPrice(rs.getDouble("Price"));
+                di.setDiscountPercentage(rs.getDouble("DiscountPercentage"));
+                di.setStartDate(rs.getDate("StartDate"));
+                list.add(di);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return discounts;
+        return list;
     }
 
-    // Method to delete a discount by ID
-    public void deleteDiscount(int discountId) throws SQLException {
-        String sql = "DELETE FROM Discounts WHERE DiscountID = ?";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, discountId);
-            statement.executeUpdate();
-        }
-    }
+    public static class DiscountViewItem {
+        private int productID;
+        private String productName;
+        private boolean isWeighted;
+        private double price;
+        private double discountPercentage;
+        private java.sql.Date startDate;
 
-    // Method to close the database connection
-    public void closeConnection() {
-        try {
-            if (connection != null) {
-                connection.close();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        public int getProductID() { return productID; }
+        public void setProductID(int productID) { this.productID = productID; }
+
+        public String getProductName() { return productName; }
+        public void setProductName(String productName) { this.productName = productName; }
+
+        public boolean isIsWeighted() { return isWeighted; }
+        public void setIsWeighted(boolean isWeighted) { this.isWeighted = isWeighted; }
+
+        public double getPrice() { return price; }
+        public void setPrice(double price) { this.price = price; }
+
+        public double getDiscountPercentage() { return discountPercentage; }
+        public void setDiscountPercentage(double discountPercentage) { this.discountPercentage = discountPercentage; }
+
+        public java.sql.Date getStartDate() { return startDate; }
+        public void setStartDate(java.sql.Date startDate) { this.startDate = startDate; }
     }
 }

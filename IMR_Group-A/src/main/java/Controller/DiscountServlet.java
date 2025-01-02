@@ -1,76 +1,115 @@
 package Controller;
+
 import DAO.DiscountDAO;
-import Model.Discount;
+import DAO.DiscountDAO.DiscountViewItem;
+import DAO.UserDAO;
+import Model.User;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.*;
+
 import java.io.IOException;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 
-@WebServlet("/DiscountServlet")
+@WebServlet(name = "DiscountServlet", urlPatterns = {"/DiscountServlet"})
 public class DiscountServlet extends HttpServlet {
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String errorMessage = null;
-        String successMessage = null;
+    
+    private DiscountDAO discountDAO = new DiscountDAO();
+    private UserDAO userDAO = new UserDAO();
 
-        try {
-            int productCode = Integer.parseInt(request.getParameter("productCode"));
-            double discountPercentage = Double.parseDouble(request.getParameter("discountPercentage"));
-
-            if (productCode <= 0 || discountPercentage <= 0) {
-                throw new IllegalArgumentException("Product Code and Discount Percentage must be greater than zero.");
-            }
-
-            Discount discount = new Discount();
-            discount.setProductId(productCode);
-            discount.setDiscountPercentage(discountPercentage);
-
-            DiscountDAO discountDAO = new DiscountDAO();
-            discountDAO.addDiscount(discount);
-            successMessage = "Discount added successfully!";
-
-        } catch (NumberFormatException e) {
-            errorMessage = "Invalid input. Please ensure Product Code and Discount Percentage are valid numbers.";
-        } catch (IllegalArgumentException e) {
-            errorMessage = e.getMessage();
-        } catch (SQLException e) {
-            errorMessage = "Database error: " + e.getMessage();
-        }
-
-        // Set messages as request attributes
-        request.setAttribute("successMessage", successMessage);
-        request.setAttribute("errorMessage", errorMessage);
-
-        // Forward to JSP to display messages
-        doGet(request, response);
-    }
-
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String action = request.getParameter("action");
-        if ("delete".equals(action)) {
-            String discountIdStr = request.getParameter("discountId");
-            if (discountIdStr != null) {
-                try {
-                    int discountId = Integer.parseInt(discountIdStr);
-                    DiscountDAO discountDAO = new DiscountDAO();
-                    discountDAO.deleteDiscount(discountId);
-                    request.setAttribute("successMessage", "Discount deleted successfully!");
-                } catch (SQLException e) {
-                    request.setAttribute("errorMessage", "Database error: " + e.getMessage());
-                } catch (NumberFormatException e) {
-                    request.setAttribute("errorMessage", "Invalid discount ID.");
-                }
-            }
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("userID") == null) {
+            response.sendRedirect("Login.jsp");
+            return;
         }
 
-        DiscountDAO discountDAO = new DiscountDAO();
-        List<Discount> discountList = discountDAO.getAllDiscounts();  
-        request.setAttribute("discounts", discountList);  
+        int currentUserID = (int) session.getAttribute("userID");
+        User currentUser = userDAO.getUserByID(currentUserID);
+        String currentRole = (currentUser != null) ? currentUser.getRole() : "Unknown";
+        String fullname = (currentUser != null) ? currentUser.getFullName() : "UnknownUser";
+
+        request.setAttribute("currentRole", currentRole);
+        request.setAttribute("fullname", fullname);
+
+        List<DiscountViewItem> discountList = discountDAO.getAllDiscounts();
+        request.setAttribute("discountList", discountList);
+
         request.getRequestDispatcher("Discounts.jsp").forward(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("userID") == null) {
+            response.sendRedirect("Login.jsp");
+            return;
+        }
+
+        int currentUserID = (int) session.getAttribute("userID");
+        User currentUser = userDAO.getUserByID(currentUserID);
+        String currentRole = (currentUser != null) ? currentUser.getRole() : "Unknown";
+
+        String action = request.getParameter("action");
+        if (action == null) {
+            response.sendRedirect("DiscountServlet");
+            return;
+        }
+
+        if ("Cashier".equalsIgnoreCase(currentRole)) {
+            response.sendRedirect("DiscountServlet");
+            return;
+        }
+
+        switch (action.toLowerCase()) {
+            case "adddiscount":
+                handleAddDiscount(request, response);
+                break;
+            case "deletediscount":
+                handleDeleteDiscount(request, response);
+                break;
+        }
+    }
+    
+    private void handleAddDiscount(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        String productCodeStr = request.getParameter("productCode"); 
+        String discountPctStr = request.getParameter("discountPercentage");
+
+        try {
+            int productID = Integer.parseInt(productCodeStr);
+            double discountPct = Double.parseDouble(discountPctStr);
+
+            Date startDate = Date.valueOf(LocalDate.now());
+
+            discountDAO.addDiscount(productID, discountPct, startDate);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+        }
+
+        response.sendRedirect("DiscountServlet");
+    }
+
+    private void handleDeleteDiscount(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        String productIDStr = request.getParameter("productID"); 
+        try {
+            int productID = Integer.parseInt(productIDStr);
+            discountDAO.deleteDiscount(productID);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+        }
+        response.sendRedirect("DiscountServlet");
     }
 }
