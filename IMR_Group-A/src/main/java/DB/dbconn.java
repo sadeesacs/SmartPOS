@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class dbconn {
-    private static final String DB_URL = "jdbc:sqlserver://localhost:1433;databaseName=POSSystemDB2;encrypt=false";
+    private static final String DB_URL = "jdbc:sqlserver://localhost:1433;databaseName=POSSystemDB;encrypt=false";
     private static final String DB_USERNAME = "root";        
     private static final String DB_PASSWORD = "root"; 
     
