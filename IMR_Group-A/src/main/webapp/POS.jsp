@@ -1,29 +1,29 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page import="java.util.List" %>
+<%@ page import="Controller.POSServlet.POSItem" %>
+<%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>POS</title>
         <link rel="stylesheet" href="StyleSheet1.css" />
-
     </head>
     <body>
-        
-        <!-- Navigational Panel of the Smart POS System -->
+
+        <!-- Navigation Panel-->
         <div class="navigation">
-            <div class="Logo"><img src="images/icons/logo.png" /></div>
+            <div class="Logo"><img src="images/icons/logo.png"/></div>
             <div class="logoname"><a href="Dashboard.jsp">Smart <span style="color:#5F4AE7">POS</span></a></div>
-        
+            
             <ul class="nav-menu">
                 <a href="">
                     <li class="nav-item">
-                        <img src="images/icons/Dashboard-B.png"></img>
+                        <img src="images/icons/Dashboard-B.png"/>
                         <span>Dashboard</span>
                     </li>
                 </a>
                 <a href="">
                     <li class="nav-item active">
-                        <img src="images/icons/POS-W.png"></img>
+                        <img src="images/icons/POS-W.png"/>
                         <span>POS</span>
                     </li>
                 </a>
@@ -70,27 +70,33 @@
                     </li>
                 </a>
             </ul>
-            <button class="logout">
+
+            <!-- Logout form -->
+            <form action="POSServlet" method="post" style="display:inline;">
+                <input type="hidden" name="action" value="logout"/>
+                <button class="logout" type="submit">
                     <img src="images/icons/Logout.png"/>
                     <span>Logout</span>
-            </button>
+                </button>
+            </form>
         </div>
-        
-        
-        <!--Notification Icon of the header-->
+
         <div class="notfication-icon">
             <img src="images/icons/notify-icon.png">
         </div>
-        
-        
-        <!--User Profile View of the header-->
         <div class="user-profile">
             <div class="user-avatar">
-              <img src="images/icons/usericon.png">
+                <img src="images/icons/usericon.png">
             </div>
             <div class="user-info">
-              <span class="user-name">Leo Perera</span>
-              <span class="user-role">Admin</span>
+              <%
+                  String currentRole = (String) request.getAttribute("currentRole");
+                  String fullname = (String) request.getAttribute("fullname");
+                  if (currentRole == null) currentRole = "UnknownRole";
+                  if (fullname == null) fullname = "UnknownUser";
+              %>
+              <span class="user-name"><%= fullname %></span>
+              <span class="user-role"><%= currentRole %></span>
             </div>
         </div>
 
@@ -99,71 +105,103 @@
             Point of Sale
         </div>
 
-        <!--Middle Container for content-->
+        <!-- Middle Container -->
         <div class="middle-container">
-            
             <div class="POS-display-container">
-                <div class="header-container" >
+                <div class="header-container">
                     <span class="header-top" style="margin-left:10px">#</span>
                     <span class="header-top" style="margin-left:50px">Description</span>
                     <div class="header-top" style="margin-left:365px">Qty</div>
                     <div class="header-top" style="margin-left:415px">Unit Price</div>
-                    <div class="header-top" style="margin-left:510px">Discount</div> 
-                    <div class="header-top" style="margin-left:600px">Sub Total</div>                
+                    <div class="header-top" style="margin-left:510px">Discount</div>
+                    <div class="header-top" style="margin-left:600px">Sub Total</div>
                 </div>
                 <div class="content-container">
+                    <%
+                        // Retrieve cart from request
+                        List<POSItem> cart = (List<POSItem>) request.getAttribute("cartItems");
+                        if (cart != null) {
+                            for (POSItem item : cart) {
+                                double lineTotal = item.lineTotal; 
+                    %>
                     <div class="product">
-                        <p class="pro-c">1</p>
-                        <p class="pro-desc">Tetos-Savoury Cheese 60g</p>
-                        <p class="pro-qty">2</p>
-                        <p class="pro-price">260.00</p>
-                        <p class="pro-discount">20.00</p>
-                        <p class="pro-total">520.00</p>
+                        <p class="pro-c"><%= item.stockID %></p>
+                        <p class="pro-desc"><%= item.productName %></p>
+                        <p class="pro-qty"><%= item.quantity %></p>
+                        <p class="pro-price"><%= String.format("%.2f", item.price) %></p>
+                        <p class="pro-discount"><%= String.format("%.2f", item.discountPct) %></p>
+                        <p class="pro-total"><%= String.format("%.2f", lineTotal) %></p>
+
+                        <form method="post" action="POSServlet" style="display:inline;">
+                            <input type="hidden" name="action" value="removeItem"/>
+                            <input type="hidden" name="stockID" value="<%= item.stockID %>"/>
+                            <button class="delete-button" type="submit">X</button>
+                        </form>
                     </div>
-                    <div class="product">
-                        <p class="pro-c">1</p>
-                        <p class="pro-desc">Tetos-Savoury Cheese 60g</p>
-                        <p class="pro-qty">2</p>
-                        <p class="pro-price">260.00</p>
-                        <p class="pro-discount">20.00</p>
-                        <p class="pro-total">520.00</p>
-                    </div>
+                    <%
+                            }
+                        }
+                    %>
                 </div>
             </div>
-            
-            
-            
+
             <div class="POS-input-container">
                 <div class="product-entry">
-                    <label for="product-code" class="entry-label">Product Code</label>
-                    <input type="text" id="product-code" class="entry-input" />
-                    <label for="product-quantity" class="entry-label">Product Quantity</label>
-                    <input type="number" id="product-quantity" class="entry-input" />
-                    <button class="entry-button">Enter Product</button>
+                    <!-- Enter Product Form -->
+                    <form method="post" action="POSServlet">
+                        <input type="hidden" name="action" value="enterProduct"/>
+                        <label for="product-code" class="entry-label">Product Code</label>
+                        <input type="text" id="product-code" name="product-code" class="entry-input"/>
+                        <label for="product-quantity" class="entry-label">Product Quantity</label>
+                        <input type="number" id="product-quantity" name="product-quantity" class="entry-input"/>
+                        <button class="entry-button" type="submit">Enter Product</button>
+                    </form>
+                    
                     <div class="price-summary">
-                        <p><span>Total</span> <span class="summary-value">12,650.00</span></p>
-                        <p><span>Discount</span> <span class="summary-value">1,100.00</span></p>
-                        <p><span class="net-label">Net Amount</span> <span class="net-value">11,550.00</span></p>
+                        <%
+                            Double cartTotalObj = (Double) request.getAttribute("cartTotal");
+                            Double cartDiscObj  = (Double) request.getAttribute("cartDiscount");
+                            Double cartNetObj   = (Double) request.getAttribute("cartNet");
+                            double cartTotal = (cartTotalObj != null) ? cartTotalObj : 0.0;
+                            double cartDisc  = (cartDiscObj != null)  ? cartDiscObj : 0.0;
+                            double cartNet   = (cartNetObj != null)   ? cartNetObj  : 0.0;
+                        %>
+                        <p>
+                            <span>Total</span> 
+                            <span class="summary-value"><%= String.format("%.2f", cartTotal) %></span>
+                        </p>
+                        <p>
+                            <span>Discount</span> 
+                            <span class="summary-value"><%= String.format("%.2f", cartDisc) %></span>
+                        </p>
+                        <p>
+                            <span class="net-label">Net Amount</span> 
+                            <span class="net-value"><%= String.format("%.2f", cartNet) %></span>
+                        </p>
                     </div>
-                    <button class="action-button print-button" onclick="openReceiptModal()">Print Bill</button>
-                    <button class="action-button clear-button">Clear Cart</button>
+
+                    <!-- Print Bill -->
+                    <form method="post" action="POSServlet" style="display:inline;">
+                        <input type="hidden" name="action" value="printBill"/>
+                        <button class="action-button print-button" type="submit">Print Bill</button>
+                    </form>
+                    <!-- Clear Cart -->
+                    <form method="post" action="POSServlet" style="display:inline;">
+                        <input type="hidden" name="action" value="clearCart"/>
+                        <button class="action-button clear-button" type="submit">Clear Cart</button>
+                    </form>
                 </div>
             </div>
         </div>
-        
-        
-        
-        
-        
-        <!-- Modal for Bill Receipt -->
+
+        <!-- Receipt Modal -->
         <div id="receiptModal" class="modal">
             <div class="modal-content">
-                <img class="close-product-slider" src="images/icons/Cancelslide.png" onclick="closeReceiptModal()" />
+                <img class="close-product-slider" src="images/icons/Cancelslide.png" onclick="closeReceiptModal()"/>
 
-                <!-- Scrollable Modal Body -->
                 <div class="modal-body">
                     <div class="receipt-header">
-                        <div class="rec-Logo" style="left:115px;"><img src="images/icons/logo.png" /></div>
+                        <div class="rec-Logo" style="left:115px;"><img src="images/icons/logo.png"/></div>
                         <div class="rec-logoname" style="left:180px;">Smart <span style="color:#5F4AE7">POS</span></div>
                     </div>
 
@@ -171,23 +209,41 @@
                     <div class="bill-details">
                         <div class="bill-detail-row">
                             <span class="detail-label"><b>Bill No:&nbsp;&nbsp;</b></span>
-                            <span class="detail-value" id="billNo">2510646</span>
+                            <span class="detail-value" id="billNo">
+                                <%
+                                    Integer recTxID = (Integer) request.getAttribute("receiptTransactionID");
+                                    if (recTxID != null) out.print(recTxID);
+                                %>
+                            </span>
                         </div>
                         <div class="bill-detail-row">
                             <span class="detail-label"><b>Bill Date:&nbsp;&nbsp;</b></span>
-                            <span class="detail-value" id="billDate">2024-05-26</span>
+                            <span class="detail-value" id="billDate">
+                                <%
+                                    java.text.SimpleDateFormat sdfD = new java.text.SimpleDateFormat("yyyy-MM-dd");
+                                    out.print(sdfD.format(new java.util.Date()));
+                                %>
+                            </span>
                         </div>
                         <div class="bill-detail-row">
                             <span class="detail-label"><b>Billed Time:&nbsp;&nbsp;</b></span>
-                            <span class="detail-value" id="billedTime">10:30:17</span>
+                            <span class="detail-value" id="billedTime">
+                                <%
+                                    java.text.SimpleDateFormat sdfT = new java.text.SimpleDateFormat("HH:mm:ss");
+                                    out.print(sdfT.format(new java.util.Date()));
+                                %>
+                            </span>
                         </div>
                         <div class="bill-detail-row">
                             <span class="detail-label"><b>Cashier ID:&nbsp;</b></span>
-                            <span class="detail-value" id="cashierId">22646566</span>
+                            <span class="detail-value" id="cashierId">
+                                <%
+                                    out.print(session.getAttribute("userID"));
+                                %>
+                            </span>
                         </div>
                     </div>
 
-                    
                     <div class="billDetails-header-container">
                         <span class="bill-header-top header-id">#</span>
                         <span class="bill-header-top header-description">Description</span>
@@ -196,79 +252,84 @@
                         <span class="bill-header-top header-subtotal">Sub Total</span>
                     </div>
 
+                    <div id="receiptItems">
+                        <%
+                            List<POSItem> receiptLines = (List<POSItem>) request.getAttribute("receiptLines");
+                            if (receiptLines != null) {
+                                for (POSItem rLine : receiptLines) {
+                                    double lineT = rLine.lineTotal;
+                        %>
                         <div class="item">
-                            <p class="item-id">1</p>
-                            <p class="item-desc">Tetos-Savoury Cheese 60g</p>
-                            <p class="item-qty">10</p>
-                            <p class="item-price">290.00</p>
-                            <p class="item-total">290.00</p>
+                            <p class="item-id"><%= rLine.stockID %></p>
+                            <p class="item-desc"><%= rLine.productName %></p>
+                            <p class="item-qty"><%= rLine.quantity %></p>
+                            <p class="item-price"><%= String.format("%.2f", rLine.price) %></p>
+                            <p class="item-total"><%= String.format("%.2f", lineT) %></p>
                         </div>
-                        <div class="item">
-                            <p class="item-id">1</p>
-                            <p class="item-desc">Tetos-Savoury Cheese 60g</p>
-                            <p class="item-qty">10</p>
-                            <p class="item-price">290.00</p>
-                            <p class="item-total">290.00</p>
-                        </div>
-                        <div class="item">
-                            <p class="item-id">1</p>
-                            <p class="item-desc">Tetos-Savoury Cheese 60g</p>
-                            <p class="item-qty">10</p>
-                            <p class="item-price">290.00</p>
-                            <p class="item-total">290.00</p>
-                        </div>
-                        <div class="item">
-                            <p class="item-id">1</p>
-                            <p class="item-desc">Tetos-Savoury Cheese 60g</p>
-                            <p class="item-qty">10</p>
-                            <p class="item-price">290.00</p>
-                            <p class="item-total">290.00</p>
-                        </div>
-                    
-                    <!-- Bill Summary -->
+                        <%
+                                }
+                            }
+                        %>
+                    </div>
+
+                    <!-- Bill Summary in the receipt -->
                     <div class="bill-summary">
                         <p>
                             <b>Total:</b>
-                            <span class="bill-summary-value" id="total-value">12,650.00</span>
+                            <span class="bill-summary-value" id="total-value">
+                                <%
+                                    Double rTot = (Double) request.getAttribute("receiptTotal");
+                                    if (rTot != null) out.print(String.format("%.2f", rTot));
+                                %>
+                            </span>
                         </p>
                         <p>
                             <b>Discount:</b>
-                            <span class="bill-summary-value" id="discount-value">1,100.00</span>
+                            <span class="bill-summary-value" id="discount-value">
+                                <%
+                                    Double rDis = (Double) request.getAttribute("receiptDiscount");
+                                    if (rDis != null) out.print(String.format("%.2f", rDis));
+                                %>
+                            </span>
                         </p>
                         <p>
                             <b>Net Amount:</b>
-                            <span class="bill-summary-value" id="net-amount-value" style="font-size: 18px; font-weight: bold;">11,550.00</span>
+                            <span class="bill-summary-value" id="net-amount-value" style="font-size: 18px; font-weight: bold;">
+                                <%
+                                    Double rNet = (Double) request.getAttribute("receiptNet");
+                                    if (rNet != null) out.print(String.format("%.2f", rNet));
+                                %>
+                            </span>
                         </p>
                     </div>
                 </div>
             </div>
         </div>
-
-
-
         <script>
             const modal = document.getElementById("receiptModal");
 
-            // Function to open the modal
             function openReceiptModal() {
                 modal.style.display = "block";
             }
 
-            // Function to close the modal
             function closeReceiptModal() {
                 modal.style.display = "none";
             }
 
-            // Close the modal when clicking outside the content
-            window.onclick = function (event) {
+            window.onclick = function(event) {
                 if (event.target === modal) {
                     modal.style.display = "none";
                 }
             };
+
+            <% 
+               String showReceipt = request.getParameter("showReceipt");
+               if ("true".equalsIgnoreCase(showReceipt)) {
+            %>
+            document.addEventListener("DOMContentLoaded", function() {
+                modal.style.display = "block";
+            });
+            <% } %>
         </script>
-
-
-
-        
     </body>
 </html>
