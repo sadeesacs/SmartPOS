@@ -72,10 +72,7 @@ public class ProductCatalogServlet extends HttpServlet {
             return;
         }
 
-        // If user is Cashier => hide add/edit/delete in JSP. 
-        // But if they somehow post, we can also do a safety check:
         if ("Cashier".equalsIgnoreCase(currentRole)) {
-            // do not allow add/edit/delete, just redirect
             response.sendRedirect("ProductCatalogServlet");
             return;
         }
@@ -210,10 +207,7 @@ public class ProductCatalogServlet extends HttpServlet {
         int productID = Integer.parseInt(request.getParameter("productID"));
         productDAO.deleteProduct(productID);
     }
-
-    /**
-     * Writes uploaded file to images/products folder, returns path or null if no file
-     */
+    
     private String saveImageFile(Part filePart, HttpServletRequest request) throws IOException {
         if (filePart == null || filePart.getSize() == 0) {
             return null;

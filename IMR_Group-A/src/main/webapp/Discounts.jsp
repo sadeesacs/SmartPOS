@@ -1,15 +1,16 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page import="java.util.List" %>
+<%@ page import="DAO.DiscountDAO.DiscountViewItem" %>
+<%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Discounts</title>
         <link rel="stylesheet" href="StyleSheet7.css" />
-
     </head>
     <body>
         
-        <!-- Navigational Panel of the Smart POS System -->
+        <!-- Navigation -->
         <div class="navigation">
             <div class="Logo"><img src="images/icons/logo.png" /></div>
             <div class="logoname"><a href="Dashboard.jsp">Smart <span style="color:#5F4AE7">POS</span></a></div>
@@ -17,31 +18,31 @@
             <ul class="nav-menu">
                 <a href="">
                     <li class="nav-item">
-                        <img src="images/icons/Dashboard-B.png"></img>
+                        <img src="images/icons/Dashboard-B.png"/>
                         <span>Dashboard</span>
                     </li>
                 </a>
                 <a href="">
                     <li class="nav-item">
-                        <img src="images/icons/POS-B.png"></img>
+                        <img src="images/icons/POS-B.png"/>
                         <span>POS</span>
                     </li>
                 </a>
                 <a href="">
                     <li class="nav-item">
-                        <img src="images/icons/Products-B.png"></img>
+                        <img src="images/icons/Products-B.png"/>
                         <span>Products</span>
                     </li>
                 </a>
                 <a href="">
                     <li class="nav-item">
-                        <img src="images/icons/Stock-B.png"></img>
+                        <img src="images/icons/Stock-B.png"/>
                         <span>Stock</span>
                     </li>
                 </a>
                 <a href="">
                     <li class="nav-item active">
-                        <img src="images/icons/Discount-W.png"></img>
+                        <img src="images/icons/Discount-W.png"/>
                         <span>Discounts</span>
                     </li>
                 </a>
@@ -70,42 +71,52 @@
                     </li>
                 </a>
             </ul>
-            <button class="logout">
+            <!-- Logout form -->
+            <form action="StockServlet" method="post" style="display:inline;">
+                <input type="hidden" name="action" value="logout"/>
+                <button class="logout" type="submit">
                     <img src="images/icons/Logout.png"/>
                     <span>Logout</span>
-            </button>
+                </button>
+            </form>
         </div>
         
-        
-        <!--Notification Icon of the header-->
+        <!-- Notification Icon -->
         <div class="notfication-icon">
             <img src="images/icons/notify-icon.png">
         </div>
         
-        
-        <!--User Profile View of the header-->
+        <!-- User Profile -->
         <div class="user-profile">
             <div class="user-avatar">
               <img src="images/icons/usericon.png">
             </div>
             <div class="user-info">
-              <span class="user-name">Leo Perera</span>
-              <span class="user-role">Admin</span>
+              <%
+                  String currentRole = (String) request.getAttribute("currentRole");
+                  String fullname = (String) request.getAttribute("fullname");
+                  if (currentRole == null) currentRole = "UnknownRole";
+                  if (fullname == null) fullname = "UnknownUser";
+              %>
+              <span class="user-name"><%= fullname %></span>
+              <span class="user-role"><%= currentRole %></span>
             </div>
         </div>
         
-        
-        <!--Main Header-->
+        <!-- Main Header -->
         <div class="main-header">
             Discount Management
         </div>
         
-        
-        <!--Middle Container-->
+        <!-- Middle Container -->
         <div class="middle-container">
+            <%
+                if (!"Cashier".equalsIgnoreCase(currentRole)) {
+            %>
             <div class="add-discount-container">
                 <h2>Add Discount</h2>
-                <form action="/addDiscount" method="POST" class="discount-form">
+                <form action="DiscountServlet" method="POST" class="discount-form">
+                    <input type="hidden" name="action" value="addDiscount"/>
                     <div class="form-group">
                         <label for="productCode">Enter Product Code</label>
                         <input type="text" id="productCode" name="productCode" required style="margin-left: 100px;">
@@ -117,7 +128,9 @@
                     <button type="submit" class="add-discount-button">Add Discount</button>
                 </form>
             </div>
-
+            <%
+                }
+            %>
             <div class="header-container" style="top:60px;">
                 <span class="header-top" style="margin-left:20px">Product ID</span>
                 <span class="header-top" style="margin-left:140px">Description</span>
@@ -128,158 +141,53 @@
             </div>
                 
             <div class="content-container" style="margin-top:150px;">
+                <%
+                    List<DiscountViewItem> discountList = (List<DiscountViewItem>) request.getAttribute("discountList");
+                    if (discountList != null) {
+                        for (DiscountViewItem di : discountList) {
+                %>
                 <div class="discount">
-                    <p class="dis-product-id">#12500</p>
-                    <p class="dis-product-name">Prima Kottu Mee</p>
-                    <p class="dis-unit-price">460.00</p>
-                    <p class="dis-discount">15</p>
-                    <p class="dis-date">2024-12-20</p>
+                    <p class="dis-product-id">#<%= di.getProductID() %></p>
+                    <p class="dis-product-name"><%= di.getProductName() %></p>
+                    <p class="dis-unit-price">
+                        <%= String.format("%.2f", di.getPrice()) %>
+                    </p>
+                    <p class="dis-discount">
+                        <%= String.format("%.2f", di.getDiscountPercentage()) %>%
+                    </p>
+                    <p class="dis-date">
+                        <%
+                           java.sql.Date sd = di.getStartDate();
+                           if (sd != null) {
+                               out.print(sd.toString());
+                           } else {
+                               out.print("");
+                           }
+                        %>
+                    </p>
                     <div class="dis-actions">
-                        <div class="delete"><i class="bi bi-trash3-fill"></i></div>
+                        <%
+                            if (!"Cashier".equalsIgnoreCase(currentRole)) {
+                        %>
+                        <!-- Delete form -->
+                        <form method="post" action="DiscountServlet" style="display:inline;">
+                            <input type="hidden" name="action" value="deleteDiscount"/>
+                            <input type="hidden" name="productID" value="<%= di.getProductID() %>"/>
+                            <button class="delete" type="submit" 
+                                    onclick="return confirm('Are you sure you want to delete this discount?');">
+                                <i class="bi bi-trash3-fill"></i>
+                            </button>
+                        </form>
+                        <%
+                            }
+                        %>
                     </div> 
                 </div>
-                <div class="discount">
-                    <p class="dis-product-id">#12500</p>
-                    <p class="dis-product-name">Prima Kottu Mee</p>
-                    <p class="dis-unit-price">460.00</p>
-                    <p class="dis-discount">15</p>
-                    <p class="dis-date">2024-12-20</p>
-                    <div class="dis-actions">
-                        <div class="delete"><i class="bi bi-trash3-fill"></i></div>
-                    </div> 
-                </div>
-                <div class="discount">
-                    <p class="dis-product-id">#12500</p>
-                    <p class="dis-product-name">Prima Kottu Mee</p>
-                    <p class="dis-unit-price">460.00</p>
-                    <p class="dis-discount">15</p>
-                    <p class="dis-date">2024-12-20</p>
-                    <div class="dis-actions">
-                        <div class="delete"><i class="bi bi-trash3-fill"></i></div>
-                    </div> 
-                </div>
-                <div class="discount">
-                    <p class="dis-product-id">#12500</p>
-                    <p class="dis-product-name">Prima Kottu Mee</p>
-                    <p class="dis-unit-price">460.00</p>
-                    <p class="dis-discount">15</p>
-                    <p class="dis-date">2024-12-20</p>
-                    <div class="dis-actions">
-                        <div class="delete"><i class="bi bi-trash3-fill"></i></div>
-                    </div> 
-                </div>
-                <div class="discount">
-                    <p class="dis-product-id">#12500</p>
-                    <p class="dis-product-name">Prima Kottu Mee</p>
-                    <p class="dis-unit-price">460.00</p>
-                    <p class="dis-discount">15</p>
-                    <p class="dis-date">2024-12-20</p>
-                    <div class="dis-actions">
-                        <div class="delete"><i class="bi bi-trash3-fill"></i></div>
-                    </div> 
-                </div>
-                <div class="discount">
-                    <p class="dis-product-id">#12500</p>
-                    <p class="dis-product-name">Prima Kottu Mee</p>
-                    <p class="dis-unit-price">460.00</p>
-                    <p class="dis-discount">15</p>
-                    <p class="dis-date">2024-12-20</p>
-                    <div class="dis-actions">
-                        <div class="delete"><i class="bi bi-trash3-fill"></i></div>
-                    </div> 
-                </div>
-                <div class="discount">
-                    <p class="dis-product-id">#12500</p>
-                    <p class="dis-product-name">Prima Kottu Mee</p>
-                    <p class="dis-unit-price">460.00</p>
-                    <p class="dis-discount">15</p>
-                    <p class="dis-date">2024-12-20</p>
-                    <div class="dis-actions">
-                        <div class="delete"><i class="bi bi-trash3-fill"></i></div>
-                    </div> 
-                </div>
-                <div class="discount">
-                    <p class="dis-product-id">#12500</p>
-                    <p class="dis-product-name">Prima Kottu Mee</p>
-                    <p class="dis-unit-price">460.00</p>
-                    <p class="dis-discount">15</p>
-                    <p class="dis-date">2024-12-20</p>
-                    <div class="dis-actions">
-                        <div class="delete"><i class="bi bi-trash3-fill"></i></div>
-                    </div> 
-                </div>
-                <div class="discount">
-                    <p class="dis-product-id">#12500</p>
-                    <p class="dis-product-name">Prima Kottu Mee</p>
-                    <p class="dis-unit-price">460.00</p>
-                    <p class="dis-discount">15</p>
-                    <p class="dis-date">2024-12-20</p>
-                    <div class="dis-actions">
-                        <div class="delete"><i class="bi bi-trash3-fill"></i></div>
-                    </div> 
-                </div>
-                <div class="discount">
-                    <p class="dis-product-id">#12500</p>
-                    <p class="dis-product-name">Prima Kottu Mee</p>
-                    <p class="dis-unit-price">460.00</p>
-                    <p class="dis-discount">15</p>
-                    <p class="dis-date">2024-12-20</p>
-                    <div class="dis-actions">
-                        <div class="delete"><i class="bi bi-trash3-fill"></i></div>
-                    </div> 
-                </div>
-                <div class="discount">
-                    <p class="dis-product-id">#12500</p>
-                    <p class="dis-product-name">Prima Kottu Mee</p>
-                    <p class="dis-unit-price">460.00</p>
-                    <p class="dis-discount">15</p>
-                    <p class="dis-date">2024-12-20</p>
-                    <div class="dis-actions">
-                        <div class="delete"><i class="bi bi-trash3-fill"></i></div>
-                    </div> 
-                </div>
-                <div class="discount">
-                    <p class="dis-product-id">#12500</p>
-                    <p class="dis-product-name">Prima Kottu Mee</p>
-                    <p class="dis-unit-price">460.00</p>
-                    <p class="dis-discount">15</p>
-                    <p class="dis-date">2024-12-20</p>
-                    <div class="dis-actions">
-                        <div class="delete"><i class="bi bi-trash3-fill"></i></div>
-                    </div> 
-                </div>
-                <div class="discount">
-                    <p class="dis-product-id">#12500</p>
-                    <p class="dis-product-name">Prima Kottu Mee</p>
-                    <p class="dis-unit-price">460.00</p>
-                    <p class="dis-discount">15</p>
-                    <p class="dis-date">2024-12-20</p>
-                    <div class="dis-actions">
-                        <div class="delete"><i class="bi bi-trash3-fill"></i></div>
-                    </div> 
-                </div>
-                <div class="discount">
-                    <p class="dis-product-id">#12500</p>
-                    <p class="dis-product-name">Prima Kottu Mee</p>
-                    <p class="dis-unit-price">460.00</p>
-                    <p class="dis-discount">15</p>
-                    <p class="dis-date">2024-12-20</p>
-                    <div class="dis-actions">
-                        <div class="delete"><i class="bi bi-trash3-fill"></i></div>
-                    </div> 
-                </div>
-                <div class="discount">
-                    <p class="dis-product-id">#12500</p>
-                    <p class="dis-product-name">Prima Kottu Mee</p>
-                    <p class="dis-unit-price">460.00</p>
-                    <p class="dis-discount">15</p>
-                    <p class="dis-date">2024-12-20</p>
-                    <div class="dis-actions">
-                        <div class="delete"><i class="bi bi-trash3-fill"></i></div>
-                    </div> 
-                </div>
+                <%
+                        }
+                    }
+                %>
             </div>
         </div>
-        
     </body>
 </html>
