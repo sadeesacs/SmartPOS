@@ -390,7 +390,7 @@ html, body {
     border-bottom: 1px solid black;
     position: relative;
 }
-
+/*
 .pro-stock-id {
     color: black;
     font-size: 16px;
@@ -420,7 +420,7 @@ html, body {
     left: 670px;
     position: absolute; 
     display: inline-block; 
-}
+}*/
 
 .pro-high-revenue{
     color: black;
@@ -442,7 +442,7 @@ html, body {
     display: inline-block; 
 }
 
-.pro-stock-status{
+/*.pro-stock-status{
     color: black;
     font-size: 16px;
     margin-top: 10px; 
@@ -451,7 +451,7 @@ html, body {
     position: absolute; 
     display: inline-block;
     font-weight: bold;
-}
+}*/
 
 .pro-stock-status.in-stock {
   color: green;
