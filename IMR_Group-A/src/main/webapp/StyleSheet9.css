@@ -278,7 +278,8 @@ html, body {
     box-sizing: border-box; 
     height:100%;
     margin-left:60%;
-    width:40%;
+    padding-top: -20px;
+    width:500px;
     background: white;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -291,10 +292,11 @@ html, body {
 }
         
 .chart-card-2 canvas {
-    margin-left:30px;
-    margin-top:-95px;
-    max-width: 100%;
-    height:auto;
+    margin-top: -60px;
+    margin-left:25px;
+   width: 100%;
+    height: auto;
+    
 }
         
 .chart-card-1 h3{
