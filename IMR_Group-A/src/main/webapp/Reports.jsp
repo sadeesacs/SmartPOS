@@ -9,6 +9,22 @@
 <%@page import="jakarta.servlet.http.HttpServlet"%>
 <%@page import="jakarta.servlet.http.HttpServletRequest"%>
 <%@page import="jakarta.servlet.http.HttpServletResponse"%>
+<%@ page import="java.sql.*" %>
+<%
+    HttpSession session1 = request.getSession(false);
+    
+    if (session1 == null) {
+        response.sendRedirect("Login.jsp");
+        return;
+    }
+
+    String role = (String) session.getAttribute("Role");
+    
+    if (role == null || !role.equals("admin")) {
+        response.sendRedirect("Welcome.jsp");
+        return; 
+    }
+%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -16,8 +32,6 @@
         <title>Reports</title>
         <link rel="stylesheet" href="StyleSheet6.css" />
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-
     </head>
     <body>
 
@@ -69,7 +83,7 @@
                         <span>Customers</span>
                     </li>
                 </a>
-                <a href="">
+                <a href="Reports.jsp">
                     <li class="nav-item active">
                         <img src="images/icons/Reports-W.png"></img>
                         <span>Reports</span>
@@ -143,21 +157,7 @@
                     <div class="content-container" style="margin-top:150px;height: 70%">
                         <%
                             String selectedDate = request.getParameter("reportDate");
-                            String sql = "SELECT p.ProductID,p.ProductName,s.Quantity, "
-                                    + "CASE WHEN s.Quantity > 50 THEN 'In Stock' "
-                                    + "    WHEN s.Quantity > 0 THEN 'Low Stock' "
-                                    + "    ELSE 'Out of Stock' "
-                                    + "END AS StockStatus, "
-                                    + "COALESCE(("
-                                    + "    SELECT SUM(tl.QuantitySold) "
-                                    + "    FROM TransactionLine tl "
-                                    + "    INNER JOIN TransactionHeader th ON tl.TransactionID = th.TransactionID "
-                                    + "    WHERE tl.StockID = s.StockID "
-                                    + "    AND CONVERT(date, th.TransactionDate) = ?"
-                                    + "), 0) as QuantitySold "
-                                    + "FROM Products p "
-                                    + "INNER JOIN Stock s ON p.ProductID = s.ProductID "
-                                    + "ORDER BY p.ProductID";
+                            String sql = "SELECT * FROM dbo.fn_GetDailyStockReport(?)";
                             boolean hasData = false;
 
                             try (Connection conn = dbconn.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -224,9 +224,14 @@
 
                     .pro-stock-id {
                         width: 100px;
+                        position: absolute;
+                        left: 20px;
                     }
                     .pro-stock-name {
                         width: 250px;
+                        text-align: center;
+                        position: absolute;
+                        left: 135px;
                     }
                     .pro-stock-quantity {
                         width: 100px;
@@ -257,18 +262,17 @@
                         <label for="reportMonth" class="month-label">Select the Month</label>
                         <select id="reportMonth" name="reportMonth" class="custom-month-picker">
                             <option value="" disabled>Select Month</option>
-                            <option value="01" <%= "01".equals(request.getParameter("reportMonth")) ? "selected" : ""%>>January</option>
-                            <option value="02" <%= "02".equals(request.getParameter("reportMonth")) ? "selected" : ""%>>February</option>
-                            <option value="03" <%= "03".equals(request.getParameter("reportMonth")) ? "selected" : ""%>>March</option>
-                            <option value="04" <%= "04".equals(request.getParameter("reportMonth")) ? "selected" : ""%>>April</option>
-                            <option value="05" <%= "05".equals(request.getParameter("reportMonth")) ? "selected" : ""%>>May</option>
-                            <option value="06" <%= "06".equals(request.getParameter("reportMonth")) ? "selected" : ""%>>June</option>
-                            <option value="07" <%= "07".equals(request.getParameter("reportMonth")) ? "selected" : ""%>>July</option>
-                            <option value="08" <%= "08".equals(request.getParameter("reportMonth")) ? "selected" : ""%>>August</option>
-                            <option value="09" <%= "09".equals(request.getParameter("reportMonth")) ? "selected" : ""%>>September</option>
-                            <option value="10" <%= "10".equals(request.getParameter("reportMonth")) ? "selected" : ""%>>October</option>
-                            <option value="11" <%= "11".equals(request.getParameter("reportMonth")) ? "selected" : ""%>>November</option>
-                            <option value="12" <%= "12".equals(request.getParameter("reportMonth")) ? "selected" : ""%>>December</option>
+                            <%
+                                String[] months = {"January", "February", "March", "April", "May", "June",
+                                    "July", "August", "September", "October", "November", "December"};
+                                String selectedMonth = request.getParameter("reportMonth");
+                                for (int i = 0; i < months.length; i++) {
+                                    String value = String.format("%02d", i + 1);
+                                    String selected = value.equals(selectedMonth) ? "selected" : "";
+                                    out.println(String.format("<option value='%s' %s>%s</option>",
+                                            value, selected, months[i]));
+                                }
+                            %>
                         </select>
                         <button type="button" class="month-search-button" onclick="updateChart()">Search</button>
                     </div>
@@ -280,54 +284,44 @@
                                 String year = "2025";
 
                                 if (month == null || month.isEmpty()) {
-                                    month = "01";  // Default to January if month is not provided
+                                    month = "01";  // Default to January
                                 }
 
-                                String query = "WITH Calendar AS ("
-                                        + "SELECT DATEADD(DAY, Number - 1, DATEFROMPARTS(?, ?, 1)) AS TransactionDate "
-                                        + "FROM master.dbo.spt_values "
-                                        + "WHERE Type = 'P' AND Number BETWEEN 1 AND DAY(EOMONTH(DATEFROMPARTS(?, ?, 1))) "
-                                        + "), Transactions AS ("
-                                        + "SELECT DAY(th.TransactionDate) AS day, "
-                                        + "SUM(tl.LineTotal) AS total_revenue "
-                                        + "FROM [dbo].[TransactionHeader] th "
-                                        + "INNER JOIN [dbo].[TransactionLine] tl ON th.TransactionID = tl.TransactionID "
-                                        + "WHERE YEAR(th.TransactionDate) = ? "
-                                        + "AND MONTH(th.TransactionDate) = ? "
-                                        + "GROUP BY DAY(th.TransactionDate) "
-                                        + ") "
-                                        + "SELECT DAY(cal.TransactionDate) as day, "
-                                        + "COALESCE(trans.total_revenue, 0) AS total_revenue "
-                                        + "FROM Calendar cal "
-                                        + "LEFT JOIN Transactions trans ON DAY(cal.TransactionDate) = trans.day "
-                                        + "ORDER BY cal.TransactionDate;";
-
-                                StringBuilder dates = new StringBuilder();
-                                StringBuilder revenues = new StringBuilder();
+                                String query = "SELECT * FROM dbo.fn_GetMonthlyRevenueData(?, ?)";
+                                StringBuilder chartData = new StringBuilder();
+                                chartData.append("const chartData = {");
+                                chartData.append("labels: [], data: []};");
 
                                 try (Connection conn = dbconn.getConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
 
-                                    stmt.setString(1, year);    // First year parameter for Calendar CTE
-                                    stmt.setString(2, month);   // First month parameter for Calendar CTE
-                                    stmt.setString(3, year);    // Second year parameter for Calendar CTE
-                                    stmt.setString(4, month);   // Second month parameter for Calendar CTE
-                                    stmt.setString(5, year);    // Year parameter for Transactions filtering
-                                    stmt.setString(6, month);   // Month parameter for Transactions filtering
+                                    stmt.setString(1, year);
+                                    stmt.setString(2, month);
 
                                     try (ResultSet rs = stmt.executeQuery()) {
+                                        StringBuilder labels = new StringBuilder("labels: [");
+                                        StringBuilder data = new StringBuilder("data: [");
                                         boolean isFirst = true;
+
                                         while (rs.next()) {
                                             if (!isFirst) {
-                                                dates.append(",");
-                                                revenues.append(",");
+                                                labels.append(",");
+                                                data.append(",");
                                             }
-                                            dates.append("'Day ").append(rs.getInt("day")).append("'");
-                                            revenues.append(String.format("%.2f", rs.getDouble("total_revenue")));
+                                            labels.append("'Day ").append(rs.getInt("day")).append("'");
+                                            data.append(String.format("%.2f", rs.getDouble("total_revenue")));
                                             isFirst = false;
                                         }
+                                        labels.append("]");
+                                        data.append("]");
+
+                                        chartData = new StringBuilder();
+                                        chartData.append("const chartData = {")
+                                                .append(labels).append(",")
+                                                .append(data).append("};");
                                     }
                                 } catch (SQLException e) {
                                     e.printStackTrace();
+                                    chartData = new StringBuilder("const chartData = {labels: [], data: []};");
                                 }
                             %>
                             <div style="width: 100%; height: 400px;">
@@ -337,46 +331,33 @@
                             <script>
                                 let revenueChart = null;
 
-                                function updateChart() {
-                                    const month = document.getElementById('reportMonth').value;
-                                    if (!month) {
-                                        alert('Please select a month.');
-                                        return;
-                                    }
+                                <%= chartData.toString()%>
 
-                                    // Store chart data in form and submit
-                                    const form = document.createElement('form');
-                                    form.method = 'GET';
-                                    form.action = ''; // Current page
-
-                                    const monthInput = document.createElement('input');
-                                    monthInput.type = 'hidden';
-                                    monthInput.name = 'reportMonth';
-                                    monthInput.value = month;
-
-                                    form.appendChild(monthInput);
-                                    document.body.appendChild(form);
-                                    form.submit();
-                                }
-
-                                // Initialize chart on page load
-                                document.addEventListener('DOMContentLoaded', function () {
+                                function initializeChart() {
                                     const ctx = document.getElementById('revenueChart').getContext('2d');
                                     const monthSelect = document.getElementById('reportMonth');
                                     const selectedMonth = monthSelect.options[monthSelect.selectedIndex].text;
+
+                                    // Calculate total revenue
+                                    const totalRevenue = chartData.data.reduce((acc, curr) => acc + curr, 0);
+                                    const formattedTotalRevenue = new Intl.NumberFormat('en-LK', {
+                                        style: 'currency',
+                                        currency: 'LKR'
+                                    }).format(totalRevenue);
 
                                     // Destroy existing chart if it exists
                                     if (revenueChart) {
                                         revenueChart.destroy();
                                     }
 
+                                    // Create new chart
                                     revenueChart = new Chart(ctx, {
                                         type: 'bar',
                                         data: {
-                                            labels: [<%= dates.toString()%>],
+                                            labels: chartData.labels,
                                             datasets: [{
                                                     label: 'Daily Revenue (LKR)',
-                                                    data: [<%= revenues.toString()%>],
+                                                    data: chartData.data,
                                                     backgroundColor: 'rgba(54, 162, 235, 0.5)',
                                                     borderColor: 'rgba(54, 162, 235, 1)',
                                                     borderWidth: 1
@@ -394,10 +375,7 @@
                                                     },
                                                     ticks: {
                                                         callback: function (value) {
-                                                            return new Intl.NumberFormat('en-LK', {
-                                                                style: 'currency',
-                                                                currency: 'LKR'
-                                                            }).format(value);
+                                                            return 'LKR ' + value.toLocaleString();
                                                         }
                                                     }
                                                 },
@@ -411,29 +389,35 @@
                                             plugins: {
                                                 title: {
                                                     display: true,
-                                                    text: 'Daily Revenue for ' + selectedMonth + ' <%= year%>',
+                                                    text: [
+                                                        'Daily Revenue for ' + selectedMonth + ' <%= year%>',
+                                                        'Total Monthly Revenue: ' + formattedTotalRevenue
+                                                    ],
                                                     font: {
                                                         size: 16
-                                                    }
-                                                },
-                                                legend: {
-                                                    position: 'top'
-                                                },
-                                                tooltip: {
-                                                    callbacks: {
-                                                        label: function (context) {
-                                                            return 'Revenue: ' + new Intl.NumberFormat('en-LK', {
-                                                                style: 'currency',
-                                                                currency: 'LKR'
-                                                            }).format(context.raw);
-                                                        }
+                                                    },
+                                                    padding: {
+                                                        bottom: 20
                                                     }
                                                 }
                                             }
                                         }
                                     });
-                                });
+                                }
+
+                                function updateChart() {
+                                    const month = document.getElementById('reportMonth').value;
+                                    if (!month) {
+                                        alert('Please select a month.');
+                                        return;
+                                    }
+                                    window.location.href = '?reportMonth=' + month;
+                                }
+
+                                // Initialize chart on page load
+                                document.addEventListener('DOMContentLoaded', initializeChart);
                             </script>
+
 
                             <style>
                                 canvas {
@@ -489,8 +473,7 @@
                     <div class="month-picker-container">
                         <label for="topPerformMonth" class="month-label">Select the Month</label>
                         <select id="topPerformMonth" name="topPerformMonth" class="custom-month-picker">
-                            <option value="" disabled selected>Select Month</option>
-                            <option value="01" <%= "01".equals(request.getParameter("topPerformMonth")) ? "selected" : ""%>>January</option>
+                            <option value="01" selected>January</option>
                             <option value="02" <%= "02".equals(request.getParameter("topPerformMonth")) ? "selected" : ""%>>February</option>
                             <option value="03" <%= "03".equals(request.getParameter("topPerformMonth")) ? "selected" : ""%>>March</option>
                             <option value="04" <%= "04".equals(request.getParameter("topPerformMonth")) ? "selected" : ""%>>April</option>
@@ -514,21 +497,22 @@
                     <div class="content-container" style="margin-top:175px; height: 70%">
                         <%
                             String selectedTopMonth = request.getParameter("topPerformMonth");
-                            if (selectedTopMonth == null) {
-                        %>
-                        <p style="text-align:center; margin-top:50px; color:gray;">Please select a month to view the data.</p>
-                        <%
-                        } else {
-                            String topquery = "SELECT p.ProductID, "
-                                    + "p.ProductName, "
-                                    + "SUM(tl.QuantitySold) AS UnitsSold, "
-                                    + "SUM(tl.LineTotal) AS Revenue "
+                            String topquery = "SELECT p.ProductID, p.ProductName, "
+                                    + "COALESCE(SUM(tl.QuantitySold), 0) AS UnitsSold, "
+                                    + "COALESCE(SUM(tl.LineTotal), 0) AS Revenue "
                                     + "FROM Products p "
-                                    + "INNER JOIN TransactionLine tl ON p.ProductID = tl.StockID "
-                                    + "INNER JOIN TransactionHeader th ON tl.TransactionID = th.TransactionID "
+                                    + "LEFT JOIN ( "
+                                    + "SELECT s.ProductID, tl.QuantitySold, tl.LineTotal "
+                                    + "FROM TransactionLine tl "
+                                    + "INNER JOIN "
+                                    + "TransactionHeader th ON tl.TransactionID = th.TransactionID "
+                                    + "INNER JOIN "
+                                    + "Stock s ON tl.StockID = s.StockID "
                                     + "WHERE YEAR(th.TransactionDate) = ? "
                                     + "AND MONTH(th.TransactionDate) = ? "
+                                    + ") AS tl ON p.ProductID = tl.ProductID "
                                     + "GROUP BY p.ProductID, p.ProductName "
+                                    + "HAVING COALESCE(SUM(tl.LineTotal), 0) > 0 "
                                     + "ORDER BY Revenue DESC;";
                             boolean hasData1 = false;
 
@@ -555,11 +539,10 @@
                         <p style="color:red;">Error retrieving top-performing products. Please try again later.</p>
                         <%
                             }
-                            if (!hasData) {
+                            if (!hasData1) {
                         %>
                         <p style="text-align:center; margin-top:50px; color:gray;">No values yet for the selected month.</p>
                         <%
-                                }
                             }
                         %>
                     </div>
@@ -570,12 +553,11 @@
 
 
                 <!--Low Performing Products-->
-                <div id="Low Performing Products" class="report-slide ">
+                <div id="Low Performing Products" class="report-slide">
                     <div class="month-picker-container">
                         <label for="lowPerformMonth" class="month-label">Select the Month</label>
                         <select id="lowPerformMonth" name="lowPerformMonth" class="custom-month-picker">
-                            <option value="" disabled selected>Select Month</option>
-                            <option value="01" <%= "01".equals(request.getParameter("lowPerformMonth")) ? "selected" : ""%>>January</option>
+                            <option value="01" selected>January</option>
                             <option value="02" <%= "02".equals(request.getParameter("lowPerformMonth")) ? "selected" : ""%>>February</option>
                             <option value="03" <%= "03".equals(request.getParameter("lowPerformMonth")) ? "selected" : ""%>>March</option>
                             <option value="04" <%= "04".equals(request.getParameter("lowPerformMonth")) ? "selected" : ""%>>April</option>
@@ -599,21 +581,22 @@
                     <div class="content-container" style="margin-top:175px;height: 70%">
                         <%
                             String selectedlowMonth = request.getParameter("lowPerformMonth");
-                            if (selectedlowMonth == null) {
-                        %>
-                        <p style="text-align:center; margin-top:50px; color:gray;">Please select a month to view the data.</p>
-                        <%
-                        } else {
-                            String lowquery = "SELECT p.ProductID, "
-                                    + "p.ProductName, "
-                                    + "SUM(tl.QuantitySold) AS UnitsSold, "
-                                    + "SUM(tl.LineTotal) AS Revenue "
+                            String lowquery = "SELECT p.ProductID, p.ProductName, "
+                                    + "COALESCE(SUM(tl.QuantitySold), 0) AS UnitsSold, "
+                                    + "COALESCE(SUM(tl.LineTotal), 0) AS Revenue "
                                     + "FROM Products p "
-                                    + "INNER JOIN TransactionLine tl ON p.ProductID = tl.StockID "
-                                    + "INNER JOIN TransactionHeader th ON tl.TransactionID = th.TransactionID "
+                                    + "LEFT JOIN ( "
+                                    + "SELECT s.ProductID, tl.QuantitySold, tl.LineTotal "
+                                    + "FROM TransactionLine tl "
+                                    + "INNER JOIN "
+                                    + "TransactionHeader th ON tl.TransactionID = th.TransactionID "
+                                    + "INNER JOIN "
+                                    + "Stock s ON tl.StockID = s.StockID "
                                     + "WHERE YEAR(th.TransactionDate) = ? "
-                                    + (selectedlowMonth != null ? "AND MONTH(th.TransactionDate) = ? " : "")
+                                    + "AND MONTH(th.TransactionDate) = ? "
+                                    + ") AS tl ON p.ProductID = tl.ProductID "
                                     + "GROUP BY p.ProductID, p.ProductName "
+                                    + "HAVING COALESCE(SUM(tl.LineTotal), 0) > 0 "
                                     + "ORDER BY Revenue ASC;";
                             boolean hasData2 = false;
 
@@ -637,103 +620,162 @@
                         } catch (SQLException e) {
                             e.printStackTrace();
                         %>
-                        <p style="color:red;">Error retrieving low-performing products. Please try again later.</p>
+                        <p style="color:red;">Error retrieving top-performing products. Please try again later.</p>
                         <%
                             }
-                            if (!hasData) {
+                            if (!hasData2) {
                         %>
                         <p style="text-align:center; margin-top:50px; color:gray;">No values yet for the selected month.</p>
                         <%
-                                }
                             }
                         %>
                     </div>
                 </div>
+            </div>
+        </div>
 
 
 
-                <script>
-                    document.addEventListener("DOMContentLoaded", () => {
-                        const navButtons = document.querySelectorAll(".report-nav button");
-                        const slides = document.querySelectorAll(".report-slide"); // Corrected selector
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const navButtons = document.querySelectorAll(".report-nav button");
+                const slides = document.querySelectorAll(".report-slide");
 
-                        navButtons.forEach((button) => {
-                            button.addEventListener("click", () => {
-                                const targetId = button.getAttribute("data-target");
+                const topPerformMonth = document.getElementById('topPerformMonth');
+                const lowPerformMonth = document.getElementById('lowPerformMonth');
+                const currentDate = new Date();
+                const currentMonth = String(currentDate.getMonth() + 1).padStart(2, '0');
 
-                                navButtons.forEach((btn) => btn.classList.remove("active"));
-                                button.classList.add("active");
+                if (!topPerformMonth.value) {
+                    topPerformMonth.value = currentMonth;
+                }
+                if (!lowPerformMonth.value) {
+                    lowPerformMonth.value = currentMonth;
+                }
 
-                                slides.forEach((slide) => {
-                                    slide.classList.remove("active");
-                                    if (slide.id === targetId) {
-                                        slide.classList.add("active");
-                                    }
-                                });
-                            });
-                        });
-                    });
+                if (window.location.search === '') {
+                    loadInitialData();
+                }
 
+                navButtons.forEach((button) => {
+                    button.addEventListener("click", () => {
+                        const targetId = button.getAttribute("data-target");
 
-                    document.addEventListener("DOMContentLoaded", () => {
-                        const stockCards = document.querySelectorAll(".pro-stock");
+                        navButtons.forEach((btn) => btn.classList.remove("active"));
+                        button.classList.add("active");
 
-                        stockCards.forEach((card) => {
-                            const status = card.getAttribute("data-status");
-
-                            const statusElement = card.querySelector(".pro-stock-status");
-
-                            if (status === "in-stock") {
-                                statusElement.classList.add("in-stock");
-                                statusElement.textContent = "In Stock";
-                            } else if (status === "out-of-stock") {
-                                statusElement.classList.add("out-of-stock");
-                                statusElement.textContent = "Out of Stock";
-                            } else if (status === "low-stock") {
-                                statusElement.classList.add("low-stock");
-                                statusElement.textContent = "Low Stock";
+                        slides.forEach((slide) => {
+                            slide.classList.remove("active");
+                            if (slide.id === targetId) {
+                                slide.classList.add("active");
                             }
                         });
                     });
+                });
 
-                    function updateTopProducts() {
-                        const month = document.getElementById('topPerformMonth').value;
-                        if (!month)
-                            return;
+                const stockCards = document.querySelectorAll(".pro-stock");
+                stockCards.forEach((card) => {
+                    const status = card.getAttribute("data-status");
+                    const statusElement = card.querySelector(".pro-stock-status");
 
-                        const form = document.createElement('form');
-                        form.method = 'GET';
-                        form.action = '';
-
-                        const monthInput = document.createElement('input');
-                        monthInput.type = 'hidden';
-                        monthInput.name = 'topPerformMonth';
-                        monthInput.value = month;
-
-                        form.appendChild(monthInput);
-                        document.body.appendChild(form);
-                        form.submit();
+                    if (statusElement) {
+                        if (status === "in-stock") {
+                            statusElement.classList.add("in-stock");
+                            statusElement.textContent = "In Stock";
+                        } else if (status === "out-of-stock") {
+                            statusElement.classList.add("out-of-stock");
+                            statusElement.textContent = "Out of Stock";
+                        } else if (status === "low-stock") {
+                            statusElement.classList.add("low-stock");
+                            statusElement.textContent = "Low Stock";
+                        }
                     }
+                });
+            });
 
-                    function updateLowProducts() {
-                        const month = document.getElementById('lowPerformMonth').value;
-                        if (!month)
-                            return;
+            function loadInitialData() {
+                const currentDate = new Date();
+                const currentMonth = String(currentDate.getMonth() + 1).padStart(2, '0');
 
-                        const form = document.createElement('form');
-                        form.method = 'GET';
-                        form.action = '';
+                const form = document.createElement('form');
+                form.method = 'GET';
+                form.action = '';
 
-                        const monthInput = document.createElement('input');
-                        monthInput.type = 'hidden';
-                        monthInput.name = 'lowPerformMonth';
-                        monthInput.value = month;
+                const topMonthInput = document.createElement('input');
+                topMonthInput.type = 'hidden';
+                topMonthInput.name = 'topPerformMonth';
+                topMonthInput.value = currentMonth;
 
-                        form.appendChild(monthInput);
-                        document.body.appendChild(form);
-                        form.submit();
+                const lowMonthInput = document.createElement('input');
+                lowMonthInput.type = 'hidden';
+                lowMonthInput.name = 'lowPerformMonth';
+                lowMonthInput.value = currentMonth;
+
+                form.appendChild(topMonthInput);
+                form.appendChild(lowMonthInput);
+                document.body.appendChild(form);
+
+                form.submit();
+            }
+
+            function updateTopProducts() {
+                const month = document.getElementById('topPerformMonth').value;
+                if (!month)
+                    return;
+
+                const form = document.createElement('form');
+                form.method = 'GET';
+                form.action = '';
+
+                const urlParams = new URLSearchParams(window.location.search);
+                for (const [key, value] of urlParams) {
+                    if (key !== 'topPerformMonth') {
+                        const input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = key;
+                        input.value = value;
+                        form.appendChild(input);
                     }
-                </script>
+                }
 
-                </body>
-                </html>
+                const monthInput = document.createElement('input');
+                monthInput.type = 'hidden';
+                monthInput.name = 'topPerformMonth';
+                monthInput.value = month;
+                form.appendChild(monthInput);
+                document.body.appendChild(form);
+                form.submit();
+            }
+
+            function updateLowProducts() {
+                const month = document.getElementById('lowPerformMonth').value;
+                if (!month)
+                    return;
+
+                const form = document.createElement('form');
+                form.method = 'GET';
+                form.action = '';
+
+                const urlParams = new URLSearchParams(window.location.search);
+                for (const [key, value] of urlParams) {
+                    if (key !== 'lowPerformMonth') {
+                        const input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = key;
+                        input.value = value;
+                        form.appendChild(input);
+                    }
+                }
+
+                const monthInput = document.createElement('input');
+                monthInput.type = 'hidden';
+                monthInput.name = 'lowPerformMonth';
+                monthInput.value = month;
+                form.appendChild(monthInput);
+                document.body.appendChild(form);
+                form.submit();
+            }
+        </script>
+
+    </body>
+</html>
