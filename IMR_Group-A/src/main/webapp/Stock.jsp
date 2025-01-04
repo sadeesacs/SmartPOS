@@ -9,13 +9,12 @@
     </head>
     <body>
         
-        <!-- Navigation -->
+        <!-- Navigational Panel -->
         <div class="navigation">
             <div class="Logo"><img src="images/icons/logo.png" /></div>
             <div class="logoname"><a href="Dashboard.jsp">Smart <span style="color:#5F4AE7">POS</span></a></div>
-        
+
             <ul class="nav-menu">
-                <!-- Original Items -->
                 <a href="">
                     <li class="nav-item">
                         <img src="images/icons/Dashboard-B.png"/>
@@ -72,24 +71,25 @@
                 </a>
             </ul>
 
+            <!-- Logout button form -->
             <form action="StockServlet" method="post" style="display:inline;">
-                <input type="hidden" name="action" value="logout" />
+                <input type="hidden" name="action" value="logout"/>
                 <button class="logout" type="submit">
                     <img src="images/icons/Logout.png"/>
                     <span>Logout</span>
                 </button>
             </form>
         </div>
-        
+
         <!-- Notification Icon -->
         <div class="notfication-icon">
             <img src="images/icons/notify-icon.png">
         </div>
 
-        <!--User Profile-->
+        <!-- User Profile -->
         <div class="user-profile">
             <div class="user-avatar">
-                <img src="images/icons/usericon.png">
+              <img src="images/icons/usericon.png">
             </div>
             <div class="user-info">
               <%
@@ -103,11 +103,12 @@
             </div>
         </div>
 
-        <!--Main Header-->
+        <!-- Main Header -->
         <div class="main-header">
             Stock Level Management
         </div>
 
+        <!-- Retrieve the 4 lists from request -->
         <%
             List<Stock> normalStock    = (List<Stock>) request.getAttribute("normalStock");
             List<Stock> criticalStock  = (List<Stock>) request.getAttribute("criticalStock");
@@ -115,7 +116,7 @@
             List<Stock> outOfStock     = (List<Stock>) request.getAttribute("outOfStock");
         %>
 
-        <!--Middle Container-->
+        <!-- Middle Container -->
         <div class="middle-container">
             <nav class="stock-nav">
                 <button data-target="Stock" class="active">Stock</button>
@@ -124,17 +125,12 @@
                 <button data-target="Out of Stock">Out of Stock</button>
             </nav>
             <div class="stock-slides">
+                <!-- Stock -->
                 <div id="Stock" class="stock-slide active">
-                    <%
-                        if (!"Cashier".equalsIgnoreCase(currentRole)) {
-                    %>
                     <button class="add-button" onclick="showSlider()">
                         <div>+</div>
                         <p>Add Stock</p>
                     </button>
-                    <%
-                        }
-                    %>
                     <div class="header-container">
                         <span class="header-top" style="margin-left:20px">Stock ID</span>
                         <span class="header-top" style="margin-left:150px">Product Name</span>
@@ -145,32 +141,26 @@
                     </div>
                     <div class="content-container" style="height:76%;">
                         <%
-                            for (Stock st : normalStock) {
-                                String stockIDFormatted = String.format("%06d", st.getStockID());
+                            for (Stock s : normalStock) {
                         %>
                         <div class="pro-stock">
-                            <p class="pro-stock-id">#<%= stockIDFormatted %></p>
-                            <p class="pro-stock-name"><%= st.getProductName() %></p>
-                            <p class="pro-stock-quantity"><%= st.getQuantity() %></p>
-                            <p class="pro-stock-mandate"><%= st.getManufactureDate() %></p>
-                            <p class="pro-stock-expirydate"><%= st.getExpiryDate() %></p>
+                            <p class="pro-stock-id">#<%= s.getStockID() %></p>
+                            <p class="pro-stock-name"><%= s.getProductName() %></p>
+                            <p class="pro-stock-quantity"><%= s.getQuantity() %></p>
+                            <p class="pro-stock-mandate"><%= s.getManufactureDate() %></p>
+                            <p class="pro-stock-expirydate"><%= s.getExpiryDate() %></p>
                             <div class="stock-actions">
-                                <%
-                                    if (!"Cashier".equalsIgnoreCase(currentRole)) {
-                                %>
-                                <div class="edit" onclick="showEditSlider('<%= st.getStockID() %>','<%= st.getProductName() %>','<%= st.getQuantity() %>','<%= st.getManufactureDate() %>','<%= st.getExpiryDate() %>')">
+                                <div class="edit" onclick="showEditSlider('<%= s.getStockID() %>', '<%= s.getProductName() %>', '<%= s.getQuantity() %>', '<%= s.getManufactureDate() %>', '<%= s.getExpiryDate() %>')">
                                     <i class="bi bi-pencil-fill"></i>
                                 </div>
-                                <form method="post" action="StockServlet" style="display:inline;">
+                                <form method="post" action="StockServlet">
                                     <input type="hidden" name="action" value="delete"/>
-                                    <input type="hidden" name="stockID" value="<%= st.getStockID() %>"/>
+                                    <input type="hidden" name="stockID" value="<%= s.getStockID() %>"/>
                                     <button class="delete" type="submit" onclick="return confirm('Delete this stock?');">
                                         <i class="bi bi-trash3-fill"></i>
                                     </button>
                                 </form>
-                                <%
-                                    }
-                                %>
+                                
                             </div>
                         </div>
                         <%
@@ -179,8 +169,7 @@
                     </div>
                 </div>
                 
-                
-                <!--Critical Stock-->
+                <!-- Critical Stock -->
                 <div id="Critical Stock" class="stock-slide">
                     <div class="header-container" style="margin-top:30px;">
                         <span class="header-top" style="margin-left:20px">Stock ID</span>
@@ -191,22 +180,20 @@
                     </div>
                     <div class="content-container" style="height:85%;margin-top:70px;">
                         <%
-                            for (Stock st : criticalStock) {
-                                String stockIDFormatted = String.format("%06d", st.getStockID());
+                            for (Stock s : criticalStock) {
                         %>
                         <div class="pro-stock">
-                            <p class="pro-stock-id">#<%= stockIDFormatted %></p>
-                            <p class="pro-stock-name"><%= st.getProductName() %></p>
-                            <p class="pro-stock-quantity"><%= st.getQuantity() %></p>
-                            <p class="pro-C-stock-mandate"><%= st.getManufactureDate() %></p>
-                            <p class="pro-C-stock-expirydate"><%= st.getExpiryDate() %></p>
+                            <p class="pro-stock-id">#<%= s.getStockID() %></p>
+                            <p class="pro-stock-name"><%= s.getProductName() %></p>
+                            <p class="pro-stock-quantity"><%= s.getQuantity() %></p>
+                            <p class="pro-C-stock-mandate"><%= s.getManufactureDate() %></p>
+                            <p class="pro-C-stock-expirydate"><%= s.getExpiryDate() %></p>
                         </div>
                         <%
                             }
                         %>
                     </div>
                 </div>
-                
                 
                 <!-- Low Stock -->
                 <div id="Low Stock" class="stock-slide">
@@ -219,22 +206,20 @@
                     </div>
                     <div class="content-container" style="height:85%;margin-top:70px;">
                         <%
-                            for (Stock st : lowStock) {
-                                String stockIDFormatted = String.format("%06d", st.getStockID());
+                            for (Stock s : lowStock) {
                         %>
                         <div class="pro-stock">
-                            <p class="pro-stock-id">#<%= stockIDFormatted %></p>
-                            <p class="pro-stock-name"><%= st.getProductName() %></p>
-                            <p class="pro-stock-quantity"><%= st.getQuantity() %></p>
-                            <p class="pro-C-stock-mandate"><%= st.getManufactureDate() %></p>
-                            <p class="pro-C-stock-expirydate"><%= st.getExpiryDate() %></p>
+                            <p class="pro-stock-id">#<%= s.getStockID() %></p>
+                            <p class="pro-stock-name"><%= s.getProductName() %></p>
+                            <p class="pro-stock-quantity"><%= s.getQuantity() %></p>
+                            <p class="pro-C-stock-mandate"><%= s.getManufactureDate() %></p>
+                            <p class="pro-C-stock-expirydate"><%= s.getExpiryDate() %></p>
                         </div>
                         <%
                             }
                         %>
                     </div>
                 </div>
-                
                 
                 <!-- Out of Stock -->
                 <div id="Out of Stock" class="stock-slide">
@@ -247,17 +232,17 @@
                     </div>
                     <div class="content-container" style="height:85%;margin-top:70px;">
                         <%
-                            for (Stock st : outOfStock) {
+                            for (Stock s : outOfStock) {
                         %>
                         <div class="pro-stock">
-                            <p class="pro-stock-id">#<%= String.format("%06d", st.getProductID()) %></p>
-                            <p class="pro-stock-name"><%= st.getProductName() %></p>
-                            <p class="pro-stock-quantity"><%= st.getQuantity() %></p>
+                            <p class="pro-stock-id">#<%= s.getProductID() %></p> 
+                            <p class="pro-stock-name"><%= s.getProductName() %></p>
+                            <p class="pro-stock-quantity"><%= s.getQuantity() %></p>
                             <p class="pro-C-stock-mandate">
-                                <%= (st.getManufactureDate() != null) ? st.getManufactureDate().toString() : "---" %>
+                                <%= (s.getManufactureDate() == null) ? "" : s.getManufactureDate().toString() %>
                             </p>
                             <p class="pro-C-stock-expirydate">
-                                <%= (st.getExpiryDate() != null) ? st.getExpiryDate().toString() : "---" %>
+                                <%= (s.getExpiryDate() == null) ? "" : s.getExpiryDate().toString() %>
                             </p>
                         </div>
                         <%
@@ -265,41 +250,38 @@
                         %>
                     </div>
                 </div>
-
-            </div> 
-        </div> 
+            </div>
+        </div>
         
         <!-- ADD Item Slider -->
         <div class="product-slider" id="addproductSlider">
             <div class="product-slider-container">
                 <div class="product-slider-header">
                     <div class="product-slider-title">Add New Stock</div>
-                    <img class="close-product-slider" src="images/icons/Cancelslide.png" onclick="hideSlider()" />
+                    <img class="close-product-slider" src="images/icons/Cancelslide.png" onclick="hideSlider()"/>
                     <div class="product-slider-hline">
                         <hr size="2" color="#5F4AE7"/>
                     </div>
                 </div>
                 <div class="product-slider-form">
-                    <!-- form for adding stock -->
                     <form method="post" action="StockServlet">
                         <input type="hidden" name="action" value="add"/>
-                        
                         <div class="product-form">
                             <div class="product-form-row">
                                 <label class="product-form-label">Product ID</label>
-                                <input class="form-product-text" type="text" name="productID" required />
+                                <input class="form-product-text" type="text" name="productID" required/>
                             </div>
                             <div class="product-form-row">
                                 <label class="product-form-label">Quantity</label>
-                                <input class="form-product-text" type="text" name="quantity" required />
+                                <input class="form-product-text" type="text" name="quantity" required/>
                             </div>
                             <div class="product-form-row">
                                 <label class="product-form-label">Manufacture Date</label>
-                                <input class="form-product-text" type="date" name="manufactureDate" />
+                                <input class="form-product-text" type="date" name="manufactureDate"/>
                             </div>
                             <div class="product-form-row">
                                 <label class="product-form-label">Expiry Date</label>
-                                <input class="form-product-text" type="date" name="expiryDate" />
+                                <input class="form-product-text" type="date" name="expiryDate"/>
                             </div>
                             <button class="form-save-but" type="submit" onclick="hideSlider()">Save</button>
                         </div>
@@ -313,22 +295,21 @@
             <div class="product-slider-container">
                 <div class="product-slider-header">
                     <div class="product-slider-title">Edit Stock Details</div>
-                    <img class="close-product-slider" src="images/icons/Cancelslide.png" onclick="hideEditSlider()" />
+                    <img class="close-product-slider" src="images/icons/Cancelslide.png" onclick="hideEditSlider()"/>
                     <div class="product-slider-hline">
                         <hr size="2" color="#5F4AE7"/>
                     </div>
                 </div>
                 <div class="product-slider-form">
-                    <!-- form for editing stock -->
                     <form method="post" action="StockServlet">
                         <input type="hidden" name="action" value="update"/>
                         <input type="hidden" name="stockID" id="edit-stockID"/>
 
                         <div class="product-form">
+                            <!-- We'll show Product Name read-only or editable if you want -->
                             <div class="product-form-row">
                                 <label class="product-form-label">Product Name</label>
-                                <!-- read-only or user can change if you prefer? -->
-                                <input class="form-product-text" type="text" id="edit-productName" readonly />
+                                <input class="form-product-text" type="text" id="edit-productName" readonly/>
                             </div>
                             <div class="product-form-row">
                                 <label class="product-form-label">Quantity</label>
@@ -348,8 +329,7 @@
                 </div>
             </div>
         </div>
-        
-        
+
         <script>
             document.addEventListener("DOMContentLoaded", () => {
                 const navButtons = document.querySelectorAll(".stock-nav button");
@@ -377,19 +357,18 @@
                 document.getElementById('addproductSlider').classList.remove('active');
             }
 
-            // For editing:
-            function showEditSlider(stockID, productName, quantity, manufactureDate, expiryDate) {
+            function showEditSlider(stockID, productName, quantity, mDate, eDate) {
                 document.getElementById('edit-stockID').value = stockID;
                 document.getElementById('edit-productName').value = productName;
                 document.getElementById('edit-quantity').value = quantity;
-                // parse manufactureDate if needed
-                if (manufactureDate && manufactureDate != 'null') {
-                    document.getElementById('edit-manufactureDate').value = manufactureDate;
+
+                if (mDate && mDate !== 'null') {
+                    document.getElementById('edit-manufactureDate').value = mDate;
                 } else {
                     document.getElementById('edit-manufactureDate').value = "";
                 }
-                if (expiryDate && expiryDate != 'null') {
-                    document.getElementById('edit-expiryDate').value = expiryDate;
+                if (eDate && eDate !== 'null') {
+                    document.getElementById('edit-expiryDate').value = eDate;
                 } else {
                     document.getElementById('edit-expiryDate').value = "";
                 }
