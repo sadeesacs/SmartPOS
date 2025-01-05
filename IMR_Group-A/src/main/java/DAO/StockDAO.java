@@ -95,28 +95,51 @@ public class StockDAO {
     // Out of stock => quantity=0 or no stock row
     public List<Stock> getOutOfStock() {
         List<Stock> list = new ArrayList<>();
-        // PART A: s.Quantity=0
-        String sqlA = 
+
+        // PART A: existing rows in Stock => quantity=0
+        String sqlA =
             "SELECT s.StockID, s.ProductID, p.ProductName, s.Quantity, s.ManufactureDate, s.ExpiryDate " +
             "FROM Stock s " +
             "JOIN Products p ON s.ProductID = p.ProductID " +
             "WHERE s.Quantity = 0 " +
             "ORDER BY s.StockID ASC";
-        try (Connection conn = dbconn.getConnection();
-             Statement stmt = conn.createStatement()) {
-            // part A
-            try (ResultSet rs = stmt.executeQuery(sqlA)) {
-                while (rs.next()) {
+
+        String sqlB =
+            "SELECT 0 AS StockID, p.ProductID, p.ProductName, 0 AS Quantity, " +
+            "       NULL AS ManufactureDate, NULL AS ExpiryDate " +
+            "FROM Products p " +
+            "WHERE NOT EXISTS (SELECT 1 FROM Stock s WHERE s.ProductID = p.ProductID) " +
+            "ORDER BY p.ProductID ASC";
+
+        try (Connection conn = dbconn.getConnection()) {
+            try (PreparedStatement stmtA = conn.prepareStatement(sqlA);
+                 ResultSet rsA = stmtA.executeQuery()) {
+                while (rsA.next()) {
                     Stock st = new Stock();
-                    st.setStockID(rs.getInt("StockID"));
-                    st.setProductID(rs.getInt("ProductID"));
-                    st.setProductName(rs.getString("ProductName"));
-                    st.setQuantity(rs.getDouble("Quantity"));
-                    st.setManufactureDate(rs.getDate("ManufactureDate"));
-                    st.setExpiryDate(rs.getDate("ExpiryDate"));
+                    st.setStockID(rsA.getInt("StockID"));
+                    st.setProductID(rsA.getInt("ProductID"));
+                    st.setProductName(rsA.getString("ProductName"));
+                    st.setQuantity(rsA.getDouble("Quantity"));
+                    st.setManufactureDate(rsA.getDate("ManufactureDate"));
+                    st.setExpiryDate(rsA.getDate("ExpiryDate"));
                     list.add(st);
                 }
             }
+
+            try (PreparedStatement stmtB = conn.prepareStatement(sqlB);
+                 ResultSet rsB = stmtB.executeQuery()) {
+                while (rsB.next()) {
+                    Stock st = new Stock();
+                    st.setStockID(rsB.getInt("StockID")); 
+                    st.setProductID(rsB.getInt("ProductID"));
+                    st.setProductName(rsB.getString("ProductName"));
+                    st.setQuantity(rsB.getDouble("Quantity")); 
+                    st.setManufactureDate(rsB.getDate("ManufactureDate")); 
+                    st.setExpiryDate(rsB.getDate("ExpiryDate")); 
+                    list.add(st);
+                }
+            }
+
         } catch (SQLException e) {
         }
         return list;

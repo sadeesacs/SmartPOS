@@ -258,12 +258,8 @@
                             <p class="pro-stock-id">#<%= s.getProductID() %></p> 
                             <p class="pro-stock-name"><%= s.getProductName() %></p>
                             <p class="pro-stock-quantity"><%= s.getQuantity() %></p>
-                            <p class="pro-C-stock-mandate">
-                                <%= (s.getManufactureDate() == null) ? "" : s.getManufactureDate().toString() %>
-                            </p>
-                            <p class="pro-C-stock-expirydate">
-                                <%= (s.getExpiryDate() == null) ? "" : s.getExpiryDate().toString() %>
-                            </p>
+                            <p class="pro-C-stock-mandate"> -- </p>
+                            <p class="pro-C-stock-expirydate"> -- </p>
                         </div>
                         <%
                             }
