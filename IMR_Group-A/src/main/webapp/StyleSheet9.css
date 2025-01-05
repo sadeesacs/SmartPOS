@@ -113,7 +113,7 @@ html, body {
     display: flex;
     cursor: pointer;
     position: absolute;
-    margin-top: 640px;
+    top: 90%;
     margin-left:40px;
     background-color:#F3F7FF;
     border:none;
