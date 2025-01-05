@@ -369,7 +369,7 @@ html, body {
     font-size: 16px;
     margin-top: 10px; 
     font-family: Arial, Helvetica, sans-serif;
-    left: 710px;
+    left: 690px;
     position: absolute; 
     display: inline-block; 
 }
@@ -379,7 +379,7 @@ html, body {
     font-size: 16px;
     margin-top: 10px; 
     font-family: Arial, Helvetica, sans-serif;
-    left: 870px;
+    left:860px;
     position: absolute; 
     display: inline-block; 
 }
@@ -389,7 +389,7 @@ html, body {
     font-size: 16px;
     margin-top: 10px; 
     font-family: Arial, Helvetica, sans-serif;
-    left: 910px;
+    left: 860px;
     position: absolute; 
     display: inline-block; 
 }
@@ -401,7 +401,7 @@ html, body {
 .stock-actions {
     display: flex; 
     align-items: center;
-    left: 1010px; 
+    left: 1000px; 
     position: absolute; 
     top: 50%; 
     transform: translateY(-50%);
@@ -417,6 +417,19 @@ html, body {
     text-decoration: none;
     color: red;
     cursor: pointer;
+    border:none;
+    background-color: transparent;
+    font-size:16px;
+}
+
+.delete-other {
+    text-decoration: none;
+    color: red;
+    cursor: pointer;
+    border:none;
+    background-color: transparent;
+    font-size:16px;
+    margin-left: 20px;
 }
 
 

@@ -365,6 +365,9 @@ html, body {
     text-decoration: none;
     color: red;
     cursor: pointer;
+    border:none;
+    background-color: transparent;
+    font-size:15px;
 }
 
 
