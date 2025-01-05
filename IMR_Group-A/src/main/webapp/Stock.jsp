@@ -160,7 +160,6 @@
                                         <i class="bi bi-trash3-fill"></i>
                                     </button>
                                 </form>
-                                
                             </div>
                         </div>
                         <%
@@ -177,6 +176,8 @@
                         <div class="header-top" style="margin-left:590px">Quantity</div>
                         <div class="header-top" style="margin-left:700px">Manufacture Date</div>
                         <div class="header-top" style="margin-left:870px">Expiry Date</div>
+                        <div class="header-top" style="margin-left:1020px">Action</div>
+
                     </div>
                     <div class="content-container" style="height:85%;margin-top:70px;">
                         <%
@@ -188,6 +189,15 @@
                             <p class="pro-stock-quantity"><%= s.getQuantity() %></p>
                             <p class="pro-C-stock-mandate"><%= s.getManufactureDate() %></p>
                             <p class="pro-C-stock-expirydate"><%= s.getExpiryDate() %></p>
+                            <div class="stock-actions">
+                                <form method="post" action="StockServlet">
+                                    <input type="hidden" name="action" value="delete"/>
+                                    <input type="hidden" name="stockID" value="<%= s.getStockID() %>"/>
+                                    <button class="delete-other" type="submit" onclick="return confirm('Delete this stock?');">
+                                        <i class="bi bi-trash3-fill"></i>
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                         <%
                             }
@@ -203,6 +213,7 @@
                         <div class="header-top" style="margin-left:590px">Quantity</div>
                         <div class="header-top" style="margin-left:700px">Manufacture Date</div>
                         <div class="header-top" style="margin-left:870px">Expiry Date</div>
+                        <div class="header-top" style="margin-left:1020px">Action</div>
                     </div>
                     <div class="content-container" style="height:85%;margin-top:70px;">
                         <%
@@ -214,6 +225,15 @@
                             <p class="pro-stock-quantity"><%= s.getQuantity() %></p>
                             <p class="pro-C-stock-mandate"><%= s.getManufactureDate() %></p>
                             <p class="pro-C-stock-expirydate"><%= s.getExpiryDate() %></p>
+                            <div class="stock-actions">
+                                <form method="post" action="StockServlet">
+                                    <input type="hidden" name="action" value="delete"/>
+                                    <input type="hidden" name="stockID" value="<%= s.getStockID() %>"/>
+                                    <button class="delete-other" type="submit" onclick="return confirm('Delete this stock?');">
+                                        <i class="bi bi-trash3-fill"></i>
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                         <%
                             }

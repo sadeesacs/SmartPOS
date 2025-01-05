@@ -265,7 +265,7 @@ html, body {
     font-size: 16px;
     margin-top: 10px; 
     font-family: Arial, Helvetica, sans-serif;
-    left: 5px;
+    left: -8px;
     position: absolute; 
     display: inline-block; 
 }
@@ -275,7 +275,7 @@ html, body {
     font-size: 16px;
     margin-top: 10px; 
     font-family: Arial, Helvetica, sans-serif;
-    left: 40px;
+    left: 75px;
     position: absolute; 
     display: inline-block; 
 }
@@ -285,7 +285,7 @@ html, body {
     font-size: 16px;
     margin-top: 10px; 
     font-family: Arial, Helvetica, sans-serif;
-    left: 355px;
+    left: 330px;
     position: absolute; 
     display: inline-block; 
 }
@@ -337,7 +337,14 @@ html, body {
 .entry-label {
     font-size: 18px;
     font-weight: bold;
-    margin-bottom: 5px;
+    display: block;
+    margin-top: 10px;
+
+}
+
+#product-quantity-label {
+    margin-top: 20px; /* Adjust space as needed */
+    display: block;
 }
 
 .entry-input {
@@ -346,10 +353,11 @@ html, body {
     border-radius: 5px;
     font-size: 16px;
     width: 98%;
+    margin-top:10px;
 }
 
 .entry-button {
-    margin-top: 10px;
+    margin-top: 15px;
     width: 50%;
     background-color: #F1F5FE;
     color: #5F4AE7;
