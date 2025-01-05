@@ -5,24 +5,7 @@
 <%@ page import="DB.dbconn" %>
 <%@ page import="java.util.*" %>
 
-<%
-    HttpSession session1 = request.getSession(false);
 
-    // Check if the session is null 
-    if (session1 == null) {
-        response.sendRedirect("Login.jsp");
-        return; 
-    }
-
-    // Get user role from session
-    String role = (String) session.getAttribute("Role");
-
-    // Check if the role is admin
-    if (role == null || !role.equals("admin")) {
-        response.sendRedirect("Login.jsp");
-        return; 
-    }
-%>
 <%
     // Initialize variables
     int totalCustomers = 0;
