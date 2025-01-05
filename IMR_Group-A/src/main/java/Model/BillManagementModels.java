@@ -1,7 +1,6 @@
 package Model;
 
 import java.sql.Timestamp;
-import java.util.List;
 
 public class BillManagementModels {
     public static class BillSummary {
