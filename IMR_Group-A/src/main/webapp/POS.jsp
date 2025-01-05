@@ -110,8 +110,8 @@
             <div class="POS-display-container">
                 <div class="header-container">
                     <span class="header-top" style="margin-left:10px">#</span>
-                    <span class="header-top" style="margin-left:50px">Description</span>
-                    <div class="header-top" style="margin-left:365px">Qty</div>
+                    <span class="header-top" style="margin-left:85px">Description</span>
+                    <div class="header-top" style="margin-left:340px">Qty</div>
                     <div class="header-top" style="margin-left:415px">Unit Price</div>
                     <div class="header-top" style="margin-left:510px">Discount</div>
                     <div class="header-top" style="margin-left:600px">Sub Total</div>
@@ -152,8 +152,8 @@
                         <input type="hidden" name="action" value="enterProduct"/>
                         <label for="product-code" class="entry-label">Product Code</label>
                         <input type="text" id="product-code" name="product-code" class="entry-input"/>
-                        <label for="product-quantity" class="entry-label">Product Quantity</label>
-                        <input type="number" id="product-quantity" name="product-quantity" class="entry-input"/>
+                        <label for="product-quantity" class="entry-label" >Product Quantity</label>
+                        <input type="number" id="id="product-quantity-label"" name="product-quantity" class="entry-input" />
                         <button class="entry-button" type="submit">Enter Product</button>
                     </form>
                     
