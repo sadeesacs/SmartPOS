@@ -19,6 +19,7 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        RequestDispatcher rd = request.getRequestDispatcher("Login.jsp");
     }
 
     
@@ -39,17 +40,20 @@ public class LoginServlet extends HttpServlet {
         if (user == null) {
             // Authentication failed
             request.setAttribute("loginError", "Invalid username or password");
-            // Forward back to Login.jsp with an error message
             RequestDispatcher rd = request.getRequestDispatcher("Login.jsp");
             rd.forward(request, response);
         } else {
-            // Success: store userID in session
             HttpSession session = request.getSession(true);
             session.setAttribute("userID", user.getUserID());
-            
-            // Redirect to SystemUsersServlet or any other page
-            response.sendRedirect("ProductCatalogServlet");
+
+            String role = user.getRole();
+            //Cashier
+            if ("Cashier".equalsIgnoreCase(role)) {
+                response.sendRedirect("POSServlet");
+            } else {
+                // Manager or Admin => Dashboard
+                response.sendRedirect("DashboardServlet");
+            }
         }
     }
-    
 }

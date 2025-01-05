@@ -13,57 +13,62 @@
         <div class="navigation">
             <div class="Logo"><img src="images/icons/logo.png"/></div>
             <div class="logoname"><a href="Dashboard.jsp">Smart <span style="color:#5F4AE7">POS</span></a></div>
-
+            
+            <%
+                String role = (String) request.getAttribute("currentRole");
+                if (role == null) role = "Unknown";
+            %>
+            
             <ul class="nav-menu">
-                <a href="">
+                <a <%= "Cashier".equalsIgnoreCase(role) ? "" : "href='DashboardServlet'" %>>
                     <li class="nav-item">
                         <img src="images/icons/Dashboard-B.png"/>
                         <span>Dashboard</span>
                     </li>
                 </a>
-                <a href="">
+                <a href="POSServlet">
                     <li class="nav-item">
                         <img src="images/icons/POS-B.png"/>
                         <span>POS</span>
                     </li>
                 </a>
-                <a href="">
+                <a href="ProductCatalogServlet">
                     <li class="nav-item active">
                         <img src="images/icons/Products-W.png"/>
                         <span>Products</span>
                     </li>
                 </a>
-                <a href="">
+                <a <%= "Cashier".equalsIgnoreCase(role) ? "" : "href='StockServlet'" %>>
                     <li class="nav-item">
                         <img src="images/icons/Stock-B.png"></img>
                         <span>Stock</span>
                     </li>
                 </a>
-                <a href="">
+                <a href="DiscountServlet">
                     <li class="nav-item ">
                         <img src="images/icons/Discount-B.png"></img>
                         <span>Discounts</span>
                     </li>
                 </a>
-                <a href="">
+                <a href="BillManagementServlet">
                     <li class="nav-item ">
                         <img src="images/icons/Bills-B.png"></img>
                         <span>Bills</span>
                     </li>
                 </a>
-                <a href="">
+                <a href="CustomersServlet">
                     <li class="nav-item ">
                         <img src="images/icons/Customers-B.png"></img>
                         <span>Customers</span>
                     </li>
                 </a>
-                <a href="">
+                <a <%= "Cashier".equalsIgnoreCase(role) ? "" : "href='ReportsServlet'" %>>
                     <li class="nav-item ">
                         <img src="images/icons/Reports-B.png"></img>
                         <span>Reports</span>
                     </li>
                 </a>
-                <a href="">
+                <a href="SystemUsersServlet">
                     <li class="nav-item ">
                         <img src="images/icons/Admin-B.png"></img>
                         <span>Users</span>
