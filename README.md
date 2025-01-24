@@ -85,12 +85,3 @@ SmartPOS is a comprehensive and efficient POS system designed to enhance superma
 4. Run the application using your preferred IDE or build tool.
 
 ---
-
-
-
-## Contact
-For inquiries or support, contact:
-- Email: [your-email@example.com]
-- GitHub: [your-username](https://github.com/your-username)
-```
-
